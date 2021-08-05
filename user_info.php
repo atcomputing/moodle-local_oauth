@@ -19,7 +19,7 @@ if (!$server->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
 $token = $server->getAccessTokenData(OAuth2\Request::createFromGlobals());
 if (isset($token['user_id']) && !empty($token['user_id'])) {
 
-    $user = $DB->get_record('user', ['id' => $token['user_id']], 'id,auth,username,idnumber,firstname,lastname,email,lang,country,phone1,address,description');
+    $user = $DB->get_record('user', ['id' => $token['user_id']], 'id,auth,username,idnumber,firstname,lastname,middlename,email,lang,country,phone1,address,description');
     if (!$user) {
         $logparams = ['other' => ['cause' => 'user_not_found']];
         $event = \local_oauth\event\user_info_request_failed::create($logparams);
