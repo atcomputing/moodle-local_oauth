@@ -36,8 +36,8 @@ if (isset($token['user_id']) && !empty($token['user_id'])) {
         $event = \local_oauth\event\user_info_request_failed::create($logparams);
         $event->trigger();
 
-          // if the scope required is different from what the token allows, this will send a "401 insufficient_scope" error
-          $response->send();
+        // if the scope required is different from what the token allows, this will send a "401 insufficient_scope" error
+        $response->send();
     }
 
     $logparams = array('userid' => $user->id);
