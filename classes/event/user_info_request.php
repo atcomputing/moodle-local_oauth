@@ -60,7 +60,7 @@ class user_info_request extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return array(SITEID, 'local_oauth', 'user_info_request', '', $this->get_description(), 0, $this->userid);
+        return [SITEID, 'local_oauth', 'user_info_request', '', $this->get_description(), 0, $this->userid];
     }
 
     /**

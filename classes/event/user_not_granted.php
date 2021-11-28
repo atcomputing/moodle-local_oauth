@@ -44,7 +44,7 @@ class user_not_granted extends user_granted {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return array(SITEID, 'local_oauth', 'user_not_granted', '', $this->get_description(), 0, $this->data['objectid']);
+        return [SITEID, 'local_oauth', 'user_not_granted', '', $this->get_description(), 0, $this->data['objectid']];
     }
 
     /**

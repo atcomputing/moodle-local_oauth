@@ -21,7 +21,7 @@ $view_table = false;
 switch ($action) {
     case 'edit':
         $id = required_param('id', PARAM_TEXT);
-        if (!$client_edit = $DB->get_record('oauth_clients', array('id' => $id))) {
+        if (!$client_edit = $DB->get_record('oauth_clients', ['id' => $id])) {
             echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
             $view_table = true;
             break;
@@ -42,7 +42,7 @@ switch ($action) {
             //do save
             if (!isset($client_edit)) {
                 $record->client_id = $fromform->client_id;
-                $record->client_secret = generate_secret();
+                $record->client_secret = local_oauth_generate_secret();
                 if (!$DB->insert_record('oauth_clients', $record)) {
                     print_error('insert_error', 'local_oauth');
                 }
@@ -67,38 +67,16 @@ switch ($action) {
             $form->user_id             = $client_edit->user_id;
             $form->action              = 'edit';
         } else {
-            $form->client_id            = "";
-            $form->redirect_uri         = "";
-            $form->grant_types          = "authorization_code";
-            $form->scope                = "user_info";
-            $form->user_id              = "0";
-            $form->action               = 'add';
+            $form->client_id           = "";
+            $form->redirect_uri        = "";
+            $form->grant_types         = "authorization_code";
+            $form->scope               = "user_info";
+            $form->user_id             = "0";
+            $form->action              = 'add';
         }
         $bform->set_data($form);
         $bform->display();
 
-        break;
-    case 'addwordpress':
-        $bform = new local_oauth_clients_wp_form();
-        if ($bform->is_cancelled()) {
-            $view_table = true;
-            break;
-        } else if ($fromform=$bform->get_data() and confirm_sesskey()) {
-            if (!oauth_add_wordpress_client($fromform->client_id, $fromform->url)) {
-                print_error('insert_error', 'local_oauth');
-            }
-            echo $OUTPUT->notification(get_string('saveok', 'local_oauth'), 'notifysuccess');
-            $view_table = true;
-            break;
-        }
-        $bform->display();
-        break;
-    case 'addnodes':
-        if (!oauth_add_wordpress_client('nodes', get_service_url('nodes'))) {
-            print_error('insert_error', 'local_oauth');
-        }
-        echo $OUTPUT->notification(get_string('saveok', 'local_oauth'), 'notifysuccess');
-        $view_table = true;
         break;
     case 'del':
         // Get values
@@ -107,7 +85,7 @@ switch ($action) {
 
         // Do delete
         if (empty($confirm)) {
-            if (!$client_edit = $DB->get_record('oauth_clients', array('id' => $id))) {
+            if (!$client_edit = $DB->get_record('oauth_clients', ['id' => $id])) {
                 echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
                 $view_table = true;
                 break;
@@ -120,7 +98,7 @@ switch ($action) {
                     <input type="submit" value="'.get_string('confirm').'" /> <input type="button" value="'.get_string('cancel').'" onclick="javascript:history.back();" />
                 </form>';
         } else {
-            if (!$DB->delete_records('oauth_clients', array('id' => $id))) {
+            if (!$DB->delete_records('oauth_clients', ['id' => $id])) {
                 print_error('delete_error', 'local_oauth');
             }
             echo $OUTPUT->notification(get_string('delok', 'local_oauth'), 'notifysuccess');
@@ -134,36 +112,23 @@ switch ($action) {
 }
 
 if ($view_table) {
-    echo '<p>';
-
-    if (function_exists('is_agora') && is_agora()) {
-        if (is_service_enabled('nodes') && !$DB->record_exists('oauth_clients', array('client_id' => 'nodes'))) {
-            echo '<a href="index.php?action=addnodes" class="btn btn-primary" style="margin-right: 10px;">'.get_string('addnodesclient', 'local_oauth').'</a>';
-        }
-        echo '<a href="index.php?action=addwordpress" class="btn btn-primary" style="margin-right: 10px;">'.get_string('addwordpressclient', 'local_oauth').'</a>';
-        echo '<a href="index.php?action=add" class="btn">'.get_string('addotherclient', 'local_oauth').'</a>';
-    } else {
-        echo '<a href="index.php?action=add" class="btn">'.get_string('addclient', 'local_oauth').'</a>';
-    }
-
-    echo '</p>';
-
     $clients = $DB->get_records('oauth_clients');
 
     if (!empty($clients)) {
         $table = new html_table();
         $table->class = 'generaltable generalbox';
-        $table->head = array(
-                            get_string('client_id', 'local_oauth'),
-                            get_string('client_secret', 'local_oauth'),
-                            get_string('grant_types', 'local_oauth'),
-                            get_string('scope', 'local_oauth'),
-                            get_string('user_id', 'local_oauth'),
-                            get_string('actions'));
-        $table->align = array('left', 'left', 'center', 'center', 'center', 'center', 'center');
+        $table->head = [
+            get_string('client_id', 'local_oauth'),
+            get_string('client_secret', 'local_oauth'),
+            get_string('grant_types', 'local_oauth'),
+            get_string('scope', 'local_oauth'),
+            get_string('user_id', 'local_oauth'),
+            get_string('actions')
+        ];
+        $table->align = ['left', 'left', 'center', 'center', 'center', 'center', 'center'];
 
         foreach ($clients as $client) {
-            $row = array();
+            $row = [];
             $row[] = $client->client_id;
             $row[] = $client->client_secret;
             $row[] = $client->grant_types;
@@ -174,6 +139,10 @@ if ($view_table) {
         }
         echo html_writer::table($table);
     }
+
+    echo '<div>';
+    echo '<a href="index.php?action=add" class="btn btn-primary">'.get_string('addclient', 'local_oauth').'</a>';
+    echo '</div>';
 }
 
 echo $OUTPUT->footer();
