@@ -7,14 +7,13 @@ require_once __DIR__.'/lib.php';
 
 $server = oauth_get_server();
 if (!$server->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
-    $logparams = array('other' => array('cause' => 'invalid_approval'));
+    $logparams = ['other' => ['cause' => 'invalid_approval']];
     $event = \local_oauth\event\user_info_request_failed::create($logparams);
     $event->trigger();
 
     $server->getResponse()->send();
     die();
 }
-
 
 $token = $server->getAccessTokenData(OAuth2\Request::createFromGlobals());
 if (isset($token['user_id']) && !empty($token['user_id'])) {
@@ -25,14 +24,21 @@ if (isset($token['user_id']) && !empty($token['user_id'])) {
         $event = \local_oauth\event\user_info_request_failed::create($logparams);
         $event->trigger();
 
+        // FIXME: there is no response at this stage!
         $response->send();
+    }
+
+    $client = $DB->get_record('oauth_clients', ['client_id' => $token['client_id']]);
+    if (!$client) {
+        // FIXME: handle error
+        return;
     }
 
     $request = OAuth2\Request::createFromGlobals();
     $response = new OAuth2\Response();
     $scopeRequired = 'user_info';
     if (!$server->verifyResourceRequest($request, $response, $scopeRequired)) {
-        $logparams = array('relateduserid' => $user->id, 'other' => array('cause' => 'insufficient_scope'));
+        $logparams = ['relateduserid' => $user->id, 'other' => ['cause' => 'insufficient_scope']];
         $event = \local_oauth\event\user_info_request_failed::create($logparams);
         $event->trigger();
 
@@ -40,12 +46,18 @@ if (isset($token['user_id']) && !empty($token['user_id'])) {
         $response->send();
     }
 
-    $logparams = array('userid' => $user->id);
+    $logparams = ['userid' => $user->id];
     $event = \local_oauth\event\user_info_request::create($logparams);
     $event->trigger();
+
+    if($client->use_email_aliases){
+        list($local, $domain) = explode('@', $user->email);
+        $user->email = $local . '+' . $user->username . '@' . $domain;
+    }
+
     echo json_encode($user);
 } else {
-    $logparams = array('other' => array('cause' => 'invalid_token'));
+    $logparams = ['other' => ['cause' => 'invalid_token']];
     $event = \local_oauth\event\user_info_request_failed::create($logparams);
     $event->trigger();
 
