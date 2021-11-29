@@ -13,6 +13,7 @@
         <FIELD NAME="grant_types" TYPE="char" LENGTH="80" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="scope" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="use_email_aliases" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="0"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -17,6 +17,7 @@ class local_oauth_clients_form extends moodleform {
         $bform->addHelpButton('client_id', 'client_id', 'local_oauth');
 
         $action = optional_param('action', false, PARAM_TEXT);
+
         if ($action == 'edit') {
             $id = required_param('id', PARAM_TEXT);
             $bform->addElement('hidden', 'id', $id);
@@ -42,6 +43,10 @@ class local_oauth_clients_form extends moodleform {
         $bform->addElement('text', 'user_id', get_string('user_id', 'local_oauth'), ['maxlength' => 80, 'size' => 45]);
         $bform->setType('user_id', PARAM_INT);
 
+        $bform->addElement('checkbox', 'use_email_aliases', get_string('use_email_aliases', 'local_oauth'));
+        $bform->addHelpButton('use_email_aliases', 'use_email_aliases', 'local_oauth');
+        $bform->setType('use_email_aliases', PARAM_BOOL);
+
         $this->add_action_buttons();
 
     }
@@ -49,6 +54,11 @@ class local_oauth_clients_form extends moodleform {
     function validation($data, $files) {
         global $DB;
         $errors = parent::validation($data, $files);
+
+        if(!isset($data['client_id'])){
+            return $errors;
+        }
+
         if ($DB->record_exists('oauth_clients', ['client_id' => $data['client_id']])) {
             $errors['client_id'] = get_string('client_id_existing_error', 'local_oauth');
         }

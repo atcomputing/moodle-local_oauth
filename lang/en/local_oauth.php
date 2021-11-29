@@ -10,6 +10,7 @@ $string['redirect_uri'] = 'Redirect URL';
 $string['grant_types'] = 'Grant Types';
 $string['scope'] = 'Scope';
 $string['user_id'] = 'User ID';
+$string['use_email_aliases'] = 'Send login and email as email';
 
 $string['auth_question'] = 'Do you want to authorize <strong>{$a}</strong>?';
 $string['auth_question_desc'] = 'This application is asking to have access this information over your account:';
@@ -35,3 +36,4 @@ $string['event_user_info_request_failed'] = 'User info request failed';
 
 $string['client_id_help'] = 'Identifier to be used from the client form in order to reference this provider. It has to be unique. For instance, a valid identifier could be "blog1" or "nodes".';
 $string['redirect_uri_help'] = 'URI where to redirect after login.';
+$string['use_email_aliases_help'] = 'Choose if users has multiple logins for one email';

@@ -38,6 +38,7 @@ switch ($action) {
             $record->grant_types = $fromform->grant_types;
             $record->scope = $fromform->scope;
             $record->user_id = $fromform->user_id ? $fromform->user_id :'';
+            $record->use_email_aliases = isset($fromform->use_email_aliases) ? 1 : 0;
 
             //do save
             if (!isset($client_edit)) {
@@ -65,6 +66,7 @@ switch ($action) {
             $form->grant_types         = $client_edit->grant_types;
             $form->scope               = $client_edit->scope;
             $form->user_id             = $client_edit->user_id;
+            $form->use_email_aliases   = $client_edit->use_email_aliases;
             $form->action              = 'edit';
         } else {
             $form->client_id           = "";
