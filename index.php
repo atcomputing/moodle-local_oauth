@@ -39,6 +39,7 @@ switch ($action) {
             $record->scope = $fromform->scope;
             $record->user_id = $fromform->user_id ? $fromform->user_id :'';
             $record->use_email_aliases = isset($fromform->use_email_aliases) ? 1 : 0;
+            $record->no_confirmation = isset($fromform->no_confirmation) ? 1 : 0;
 
             //do save
             if (!isset($client_edit)) {
@@ -67,6 +68,8 @@ switch ($action) {
             $form->scope               = $client_edit->scope;
             $form->user_id             = $client_edit->user_id;
             $form->use_email_aliases   = $client_edit->use_email_aliases;
+            $form->no_confirmation     = $client_edit->no_confirmation;
+
             $form->action              = 'edit';
         } else {
             $form->client_id           = "";
@@ -74,6 +77,7 @@ switch ($action) {
             $form->grant_types         = "authorization_code";
             $form->scope               = "user_info";
             $form->user_id             = "0";
+            $form->no_confirmation     = 1;
             $form->action              = 'add';
         }
         $bform->set_data($form);

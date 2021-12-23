@@ -26,8 +26,6 @@ $string['insert_error'] = 'Se ha producido un error creando el cliente';
 $string['update_error'] = 'Se ha producido un error actualizando la información del cliente';
 $string['delete_error'] = 'Se ha producido un error eliminando el cliente';
 
-$string['scope_user_info'] = 'Información del perfil de usuario';
-
 $string['event_user_not_granted'] = 'Usuario no autorizado';
 $string['event_user_granted'] = 'Usuario autorizado';
 $string['event_user_info_request'] = 'Petición de datos de usuario';

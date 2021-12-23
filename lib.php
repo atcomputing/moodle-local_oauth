@@ -31,6 +31,12 @@ function get_authorization_from_form($url, $clientid, $scope = false) {
         return true;
     }
 
+    $client = $DB->get_record('oauth_clients', ['id' => $clientid]);
+    if ($client && $client->no_confirmation and confirm_sesskey()) {
+        authorize_user_scope($USER->id, $clientid, $scope);
+        return true;
+    }
+
     $mform = new local_oauth_authorize_form($url);
     if ($mform->is_cancelled()) {
         return false;

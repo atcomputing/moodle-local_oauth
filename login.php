@@ -64,7 +64,6 @@ if (isloggedin() and !isguestuser()) {
     $logparams = ['objectid' => $USER->id, 'other' => ['clientid' => $clientid, 'scope' => $scope]];
     if ($isauthorized) {
         $event = \local_oauth\event\user_granted::create($logparams);
-
     } else {
         $event = \local_oauth\event\user_not_granted::create($logparams);
     }

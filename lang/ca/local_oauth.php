@@ -26,8 +26,6 @@ $string['insert_error'] = 'Error creant el client';
 $string['update_error'] = 'Error actualitzant la informació del client';
 $string['delete_error'] = 'Error eliminant el client';
 
-$string['scope_user_info'] = 'Informació del perfil d\'usuari/ària';
-
 $string['event_user_not_granted'] = 'Usuari/ària no autoritzat';
 $string['event_user_granted'] = 'Usuari/ària autoritzat';
 $string['event_user_info_request'] = 'Petició de dades d\'usuari/ària';

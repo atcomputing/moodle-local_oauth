@@ -47,6 +47,10 @@ class local_oauth_clients_form extends moodleform {
         $bform->addHelpButton('use_email_aliases', 'use_email_aliases', 'local_oauth');
         $bform->setType('use_email_aliases', PARAM_BOOL);
 
+        $bform->addElement('checkbox', 'no_confirmation', get_string('no_confirmation', 'local_oauth'));
+        $bform->addHelpButton('no_confirmation', 'no_confirmation', 'local_oauth');
+        $bform->setType('no_confirmation', PARAM_BOOL);
+
         $this->add_action_buttons();
 
     }
