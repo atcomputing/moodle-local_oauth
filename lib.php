@@ -23,7 +23,7 @@ function oauth_get_server() {
 }
 
 function get_authorization_from_form($url, $clientid, $scope = false) {
-    global $CFG, $OUTPUT, $USER;
+    global $CFG, $OUTPUT, $USER, $DB;
     require_once("{$CFG->libdir}/formslib.php");
     require_once('forms.php');
 
@@ -31,8 +31,9 @@ function get_authorization_from_form($url, $clientid, $scope = false) {
         return true;
     }
 
-    $client = $DB->get_record('oauth_clients', ['id' => $clientid]);
-    if ($client && $client->no_confirmation and confirm_sesskey()) {
+    $client = $DB->get_record('oauth_clients', ['client_id' => $clientid]);
+
+    if ($client && $client->no_confirmation) {
         authorize_user_scope($USER->id, $clientid, $scope);
         return true;
     }
