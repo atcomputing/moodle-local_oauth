@@ -1,0 +1,36 @@
+<?php
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * local_oauth upgrade
+ * @param string $oldversion Oldversion
+ * @return bool
+ */
+function xmldb_local_oauth_upgrade($oldversion) {
+    global $DB;
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2021112802) {
+        $field = new xmldb_field('use_email_aliases', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table = new xmldb_table('oauth_clients');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2021112802, 'local', 'oauth');
+    }
+
+    if ($oldversion < 2021122301) {
+        $field = new xmldb_field('no_confirmation', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        $table = new xmldb_table('oauth_clients');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2021122301, 'local', 'oauth');
+    }
+
+}

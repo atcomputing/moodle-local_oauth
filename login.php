@@ -51,7 +51,7 @@ if (isloggedin() and !isguestuser()) {
     $response = new OAuth2\Response();
 
     if (!$server->validateAuthorizeRequest($request, $response)) {
-        $logparams = array('objectid' => $USER->id, 'other' => array('clientid' => $clientid, 'scope' => $scope));
+        $logparams = ['objectid' => $USER->id, 'other' => ['clientid' => $clientid, 'scope' => $scope]];
         $event = \local_oauth\event\user_not_granted::create($logparams);
         $event->trigger();
 
@@ -61,10 +61,9 @@ if (isloggedin() and !isguestuser()) {
 
     $isauthorized = get_authorization_from_form($url, $clientid, $scope);
 
-    $logparams = array('objectid' => $USER->id, 'other' => array('clientid' => $clientid, 'scope' => $scope));
+    $logparams = ['objectid' => $USER->id, 'other' => ['clientid' => $clientid, 'scope' => $scope]];
     if ($isauthorized) {
         $event = \local_oauth\event\user_granted::create($logparams);
-
     } else {
         $event = \local_oauth\event\user_not_granted::create($logparams);
     }

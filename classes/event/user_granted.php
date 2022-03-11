@@ -53,7 +53,7 @@ class user_granted extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return array(SITEID, 'local_oauth', 'user_granted', '', $this->get_description(), 0, $this->data['objectid']);
+        return [SITEID, 'local_oauth', 'user_granted', '', $this->get_description(), 0, $this->data['objectid']];
     }
 
     /**

@@ -24,8 +24,8 @@
  */
 
 // List of tasks.
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => 'local_oauth\task\clean',
         'blocking' => 0,
         'minute' => '*',
@@ -33,5 +33,5 @@ $tasks = array(
         'day' => '*',
         'dayofweek' => '*',
         'month' => '*'
-    )
-);
+    ]
+];

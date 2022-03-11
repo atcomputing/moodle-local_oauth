@@ -7,7 +7,7 @@ function oauth_get_server() {
     require_once($CFG->dirroot.'/local/oauth/OAuth2/Autoloader.php');
     OAuth2\Autoloader::register();
 
-    $storage = new OAuth2\Storage\Moodle(array());
+    $storage = new OAuth2\Storage\Moodle([]);
 
     // Pass a storage object or array of storage objects to the OAuth2 server class
     $server = new OAuth2\Server($storage);
@@ -23,11 +23,18 @@ function oauth_get_server() {
 }
 
 function get_authorization_from_form($url, $clientid, $scope = false) {
-    global $CFG, $OUTPUT, $USER;
+    global $CFG, $OUTPUT, $USER, $DB;
     require_once("{$CFG->libdir}/formslib.php");
     require_once('forms.php');
 
     if (is_scope_authorized_by_user($USER->id, $clientid, $scope)) {
+        return true;
+    }
+
+    $client = $DB->get_record('oauth_clients', ['client_id' => $clientid]);
+
+    if ($client && $client->no_confirmation) {
+        authorize_user_scope($USER->id, $clientid, $scope);
         return true;
     }
 
@@ -51,13 +58,13 @@ function is_scope_authorized_by_user($userid, $clientid, $scope = false) {
     if (!$scope) {
         $scope = 'login';
     }
-    return $DB->record_exists('oauth_user_auth_scopes', array('client_id' => $clientid, 'scope' => $scope, 'user_id' =>  $userid));
+    return $DB->record_exists('oauth_user_auth_scopes', ['client_id' => $clientid, 'scope' => $scope, 'user_id' =>  $userid]);
 }
 
 function authorize_user_scope($userid, $clientid, $scope = false) {
     global $DB;
     if (!$scope) {
-    	$scope = 'login';
+        $scope = 'login';
     }
     $record = new StdClass();
     $record->client_id = $clientid;
