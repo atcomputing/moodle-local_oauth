@@ -22,7 +22,7 @@ function xmldb_local_oauth_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2021112802, 'local', 'oauth');
     }
 
-    if ($oldversion < 2021122301) {
+    if ($oldversion < 2022031101) {
         $field = new xmldb_field('no_confirmation', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         $table = new xmldb_table('oauth_clients');
 
@@ -30,7 +30,7 @@ function xmldb_local_oauth_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        upgrade_plugin_savepoint(true, 2021122301, 'local', 'oauth');
+        upgrade_plugin_savepoint(true, 2022031101, 'local', 'oauth');
     }
 
 }
