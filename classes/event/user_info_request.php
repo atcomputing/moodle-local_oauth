@@ -55,15 +55,6 @@ class user_info_request extends \core\event\base {
     }
 
     /**
-     * Return legacy data for add_to_log().
-     *
-     * @return array
-     */
-    protected function get_legacy_logdata() {
-        return [SITEID, 'local_oauth', 'user_info_request', '', $this->get_description(), 0, $this->userid];
-    }
-
-    /**
      * Init method.
      *
      * @return void

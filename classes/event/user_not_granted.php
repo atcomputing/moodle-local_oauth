@@ -39,15 +39,6 @@ class user_not_granted extends user_granted {
     }
 
     /**
-     * Return legacy data for add_to_log().
-     *
-     * @return array
-     */
-    protected function get_legacy_logdata() {
-        return [SITEID, 'local_oauth', 'user_not_granted', '', $this->get_description(), 0, $this->data['objectid']];
-    }
-
-    /**
      * Return localised event name.
      *
      * @return string

@@ -48,15 +48,6 @@ class user_granted extends \core\event\base {
     }
 
     /**
-     * Return legacy data for add_to_log().
-     *
-     * @return array
-     */
-    protected function get_legacy_logdata() {
-        return [SITEID, 'local_oauth', 'user_granted', '', $this->get_description(), 0, $this->data['objectid']];
-    }
-
-    /**
      * Get URL related to the action
      *
      * @return \moodle_url

@@ -57,14 +57,4 @@ class user_info_request_failed extends user_info_request {
         }
     }
 
-    /**
-     * Return legacy data for add_to_log().
-     *
-     * @return array
-     */
-    protected function get_legacy_logdata() {
-        $userid = isset($this->userid) ? $this->userid : null;
-        return [SITEID, 'local_oauth', 'user_info_request_failed', '', $this->get_description(), 0, $userid];
-    }
-
 }
