@@ -54,7 +54,12 @@ if (isset($token['user_id']) && !empty($token['user_id'])) {
         list($local, $domain) = explode('@', $user->email);
         $user->email = $local . '+' . $user->username . '@' . $domain;
     }
-
+    $enrolments = [];
+    $courses = enrol_get_users_courses($user->id,true,'shortname', null);
+    foreach ($courses as $course) {
+        $enrolments[] = $course->shortname;
+    }
+    $user->enrolments = $enrolments;
     echo json_encode($user);
 } else {
     $logparams = ['other' => ['cause' => 'invalid_token']];
