@@ -1,0 +1,20 @@
+---
+stages:
+  - publish
+
+package plugin:
+  stage: publish
+  image: ubuntu:latest
+  before_script:
+    - apt update
+    - apt install zip -y
+  script:
+    - version=$(sed -n 's/\s*$plugin->version\s*=\s\([0-9]*\);.*/\1/p' version.php)
+    - echo "version: ${version}"
+    - folder="$(dirname $CI_PROJECT_DIR)"
+    - echo "folder: ${folder}"
+    - cd ..
+    - zip ${CI_PROJECT_DIR}/local_auth_${version}.zip ${folder} -r -x '*.git/*'
+  artifacts:
+    paths:
+      - local_auth_*.zip
