@@ -48,6 +48,30 @@ switch ($action) {
                 if (!$DB->insert_record('oauth_clients', $record)) {
                     print_error('insert_error', 'local_oauth');
                 }
+
+                $config = array(
+                    "digest_alg" => "sha512",
+                    "private_key_bits" => 1028,
+                    "private_key_type" => OPENSSL_KEYTYPE_RSA,
+                );
+                // Create the private and public key
+                $res = openssl_pkey_new($config);
+
+                // Extract the private key from $res to $privKey
+                openssl_pkey_export($res, $privKey);
+
+                // Extract the public key from $res to $pubKey
+                $pubKey = openssl_pkey_get_details($res);
+                $pubKey = $pubKey["key"];
+
+                $record2 = new stdClass();
+                $record2->client_id =  $record->client_id;
+                $record2->public_key = $pubKey;
+                $record2->private_key  = $privKey;
+
+                if (!$DB->insert_record('oauth_public_keys', $record2)) {
+                    print_error('insert_error', 'local_oauth');
+                }
             } else {
                 $record->id = $client_edit->id;
                 if (!$DB->update_record('oauth_clients', $record)) {
@@ -75,7 +99,7 @@ switch ($action) {
             $form->client_id           = "";
             $form->redirect_uri        = "";
             $form->grant_types         = "authorization_code";
-            $form->scope               = "user_info";
+            $form->scope               = "openid";
             $form->user_id             = "0";
             $form->no_confirmation     = 1;
             $form->action              = 'add';

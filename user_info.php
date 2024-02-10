@@ -39,7 +39,7 @@ if (isset($token['user_id']) && !empty($token['user_id'])) {
 
     $request = OAuth2\Request::createFromGlobals();
     $response = new OAuth2\Response();
-    $scopeRequired = 'user_info';
+    $scopeRequired = 'openid';
     if (!$server->verifyResourceRequest($request, $response, $scopeRequired)) {
         $logparams = ['relateduserid' => $user->id, 'other' => ['cause' => 'insufficient_scope']];
         $event = \local_oauth\event\user_info_request_failed::create($logparams);
