@@ -23,7 +23,7 @@
  */
 
 require('../../config.php');
-require_once('lib.php');
+require_once __DIR__.'/lib.php';
 
 $clientid = required_param('client_id', PARAM_RAW);
 $responsetype = required_param('response_type', PARAM_RAW);
@@ -44,8 +44,9 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('login');
 
 if (isloggedin() and !isguestuser()) {
+
     // include our OAuth2 Server object
-    $server = oauth_get_server();
+    $server = new \local_oauth\server();
 
     $request = OAuth2\Request::createFromGlobals();
     $response = new OAuth2\Response();

@@ -1,0 +1,15 @@
+{
+    "name": "atcomputing/oauth",
+    "description": "Makes Moodle a OpenID Connect Server. which other application to user as a identity provider",
+    "type": "moodle-plugin",
+    "require": {
+        "bshaffer/oauth2-server-php": "^1.14"
+    },
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Rens Sikma",
+            "email": "r.sikma@atcomputing.nl"
+        }
+    ]
+}

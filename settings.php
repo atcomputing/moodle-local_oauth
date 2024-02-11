@@ -7,7 +7,7 @@ $ADMIN->add(
     new admin_externalpage(
         'local_oauth_settings',
         get_string('settings','local_oauth'),
-        $CFG->wwwroot . '/local/oauth/index.php',
+        $CFG->wwwroot . '/local/oauth/view.php',
         ['local/oauth:manageclients']
     )
 );

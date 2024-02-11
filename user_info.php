@@ -4,12 +4,13 @@
  */
 define('NO_DEBUG_DISPLAY', true);
 require_once '../../config.php';
-require_once __DIR__.'/lib.php';
 
 \core\session\manager::write_close();
 
-$server = oauth_get_server();
-if (!$server->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
+$server = new \local_oauth\server();
+$request = OAuth2\Request::createFromGlobals();
+
+if (!$server->verifyResourceRequest($request)) {
     $logparams = ['other' => ['cause' => 'invalid_approval']];
     $event = \local_oauth\event\user_info_request_failed::create($logparams);
     $event->trigger();
@@ -18,7 +19,7 @@ if (!$server->verifyResourceRequest(OAuth2\Request::createFromGlobals())) {
     die();
 }
 
-$token = $server->getAccessTokenData(OAuth2\Request::createFromGlobals());
+$token = $server->getAccessTokenData($request);
 if (isset($token['user_id']) && !empty($token['user_id'])) {
 
     $user = $DB->get_record('user', ['id' => $token['user_id']], 'id,auth,username,idnumber,firstname,lastname,middlename,email,lang,country,phone1,address,description');
@@ -37,7 +38,6 @@ if (isset($token['user_id']) && !empty($token['user_id'])) {
         return;
     }
 
-    $request = OAuth2\Request::createFromGlobals();
     $response = new OAuth2\Response();
     $scopeRequired = 'openid';
     if (!$server->verifyResourceRequest($request, $response, $scopeRequired)) {
