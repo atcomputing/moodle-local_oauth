@@ -11,31 +11,29 @@ admin_externalpage_setup('local_oauth_settings');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_oauth'));
 
+// Get values
 $action  = optional_param('action', '', PARAM_ALPHA);
-
-if ($action == 'del'){
-    // Get values
-    $confirm   = optional_param('confirm', 0, PARAM_INT);
+if (!empty($action)){
     $id = required_param('id', PARAM_TEXT);
+}
+if ($action == 'del'){
 
     // Do delete
-    if (empty($confirm)) {
-        if (!$client_edit = $DB->get_record('oauth_clients', ['id' => $id])) {
-            echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
-        }
-        echo '<p>'.get_string('confirmdeletestr', 'local_oauth', $client_edit->client_id).'</p>
-            <form action="view.php" method="GET">
-                <input type="hidden" name="action" value="del" />
-                <input type="hidden" name="confirm" value="1" />
-                <input type="hidden" name="id" value="'.$id.'" />
-                <input type="submit" value="'.get_string('confirm').'" /> <input type="button" value="'.get_string('cancel').'" onclick="javascript:history.back();" />
-            </form>';
-    } else {
-        if (!$DB->delete_records('oauth_clients', ['id' => $id])) {
-            print_error('delete_error', 'local_oauth');
-        }
-        echo $OUTPUT->notification(get_string('delok', 'local_oauth'), 'notifysuccess');
+    if (!$client_edit = $DB->get_record('oauth_clients', ['id' => $id])) {
+        echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
     }
+
+    $confirm  = new moodle_url($PAGE->url, ['action'=>"delconfirmed", 'id' => $id]);
+    echo $OUTPUT->confirm(
+        get_string('confirmdeletestr', 'local_oauth', $client_edit->client_id),
+        $confirm,
+        $PAGE->url,
+    );
+}else if ($action == 'delconfirmed') {
+    if (!$DB->delete_records('oauth_clients', ['id' => $id])) {
+        print_error('delete_error', 'local_oauth');
+    }
+    echo $OUTPUT->notification(get_string('delok', 'local_oauth'), 'notifysuccess');
 }
 $clients = $DB->get_records('oauth_clients');
 
@@ -59,7 +57,11 @@ if (!empty($clients)) {
         $row[] = $client->grant_types;
         $row[] = $client->scope;
         $row[] = $client->user_id;
-        $row[] = "<a href=\"edit.php?id=".$client->id."\">".get_string('edit')."</a> | <a href=\"view.php?action=del&id=".$client->id."\">".get_string('delete')."</a>";
+
+        $edit_link = "<a href=\"edit.php?id=".$client->id."\">".get_string('edit')."</a>";
+        $delete_link = "<a href=\"view.php?action=del&id=".$client->id."\">".get_string('delete')."</a>";
+        $row[] = $edit_link . "|" . $delete_link;
+
         $table->data[] = $row;
     }
     echo html_writer::table($table);
