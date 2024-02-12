@@ -28,7 +28,6 @@ class moodle implements
     \OAuth2\Storage\ScopeInterface,
     \OAuth2\Storage\PublicKeyInterface,
     \OAuth2\OpenID\Storage\UserClaimsInterface,
-    // \OAuth2\Storage\UserClaimsInterface,
     OpenIDAuthorizationCodeInterface
 {
     protected $config;
@@ -38,7 +37,11 @@ class moodle implements
         $this->config = $config;
     }
 
-    /* OAuth2\Storage\ClientCredentialsInterface */
+    /**
+     * @param string $client_id
+     * @param null|string $client_secret
+     * @return bool
+     */
     public function checkClientCredentials($client_id, $client_secret = null)
     {
         global $DB;
@@ -46,6 +49,10 @@ class moodle implements
         return $client_secret == $client_secret_db;
     }
 
+    /**
+     * @param string $client_id
+     * @return bool
+     */
     public function isPublicClient($client_id)
     {
         global $DB;
@@ -56,7 +63,10 @@ class moodle implements
         return empty($client->client_secret);
     }
 
-    /* OAuth2\Storage\ClientInterface */
+    /**
+     * @param string $client_id
+     * @return array|mixed
+     */
     public function getClientDetails($client_id)
     {
         global $DB;
@@ -68,6 +78,15 @@ class moodle implements
         return (array) $client;
     }
 
+    /**
+     * @param string $client_id
+     * @param null|string $client_secret
+     * @param null|string $redirect_uri
+     * @param null|array  $grant_types
+     * @param null|string $scope
+     * @param null|string $user_id
+     * @return bool
+     */
     public function setClientDetails($client_id, $client_secret = null, $redirect_uri = null, $grant_types = null, $scope = null, $user_id = null)
     {
         global $DB;
@@ -92,6 +111,11 @@ class moodle implements
         return true;
     }
 
+    /**
+     * @param $client_id
+     * @param $grant_type
+     * @return bool
+     */
     public function checkRestrictedGrantType($client_id, $grant_type)
     {
         $details = $this->getClientDetails($client_id);
@@ -105,7 +129,10 @@ class moodle implements
         return true;
     }
 
-    /* OAuth2\Storage\AccessTokenInterface */
+    /**
+     * @param string $access_token
+     * @return array|bool|mixed|null
+     */
     public function getAccessToken($access_token)
     {
         global $DB;
@@ -117,6 +144,14 @@ class moodle implements
         return (array) $token;
     }
 
+    /**
+     * @param string $access_token
+     * @param mixed  $client_id
+     * @param mixed  $user_id
+     * @param int    $expires
+     * @param string $scope
+     * @return bool
+     */
     public function setAccessToken($access_token, $client_id, $user_id, $expires, $scope = null)
     {
         global $DB;
@@ -141,6 +176,10 @@ class moodle implements
     }
 
     /* OAuth2\Storage\AuthorizationCodeInterface */
+    /**
+     * @param string $code
+     * @return mixed
+     */
     public function getAuthorizationCode($code)
     {
         global $DB;
@@ -152,7 +191,17 @@ class moodle implements
         return (array) $code;
     }
 
-    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null,$code_challenge = null, $code_challenge_method = nul )
+    /**
+     * @param string $code
+     * @param mixed  $client_id
+     * @param mixed  $user_id
+     * @param string $redirect_uri
+     * @param int    $expires
+     * @param string $scope
+     * @param string $id_token
+     * @return bool|mixed
+     */
+    public function setAuthorizationCode($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null,$code_challenge = null, $code_challenge_method = null)
     {
         global $DB;
         if (func_num_args() > 6) {
@@ -181,6 +230,16 @@ class moodle implements
         return true;
     }
 
+    /**
+     * @param string $code
+     * @param mixed  $client_id
+     * @param mixed  $user_id
+     * @param string $redirect_uri
+     * @param string $expires
+     * @param string $scope
+     * @param string $id_token
+     * @return bool
+     */
     private function setAuthorizationCodeWithIdToken($code, $client_id, $user_id, $redirect_uri, $expires, $scope = null, $id_token = null)
     {
         global $DB;
@@ -208,13 +267,21 @@ class moodle implements
         return true;
     }
 
+    /**
+     * @param string $code
+     * @return bool
+     */
     public function expireAuthorizationCode($code)
     {
         global $DB;
         return $DB->delete_records('oauth_authorization_codes', array('authorization_code' => $code));
     }
 
-    /* OAuth2\Storage\UserCredentialsInterface */
+    /**
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
     public function checkUserCredentials($username, $password)
     {
         if ($user = $this->getUser($username)) {
@@ -224,12 +291,20 @@ class moodle implements
         return false;
     }
 
+    /**
+     * @param string $username
+     * @return array|bool
+     */
     public function getUserDetails($username)
     {
         return $this->getUser($username);
     }
 
-    /* UserClaimsInterface */
+    /**
+     * @param mixed  $user_id
+     * @param string $claims
+     * @return array|bool
+     */
     public function getUserClaims($user_id, $claims)
     {
         if (!$userDetails = $this->getUserDetails($user_id)) {
@@ -255,6 +330,11 @@ class moodle implements
         return $userClaims;
     }
 
+    /**
+     * @param string $claim
+     * @param array  $userDetails
+     * @return array
+     */
     protected function getUserClaim($claim, $userDetails)
     {
         $userClaims = array();
@@ -268,7 +348,10 @@ class moodle implements
         return $userClaims;
     }
 
-    /* OAuth2\Storage\RefreshTokenInterface */
+    /**
+     * @param string $refresh_token
+     * @return bool|mixed
+     */
     public function getRefreshToken($refresh_token)
     {
         global $DB;
@@ -280,6 +363,14 @@ class moodle implements
         return (array) $token;
     }
 
+    /**
+     * @param string $refresh_token
+     * @param mixed  $client_id
+     * @param mixed  $user_id
+     * @param string $expires
+     * @param string $scope
+     * @return bool
+     */
     public function setRefreshToken($refresh_token, $client_id, $user_id, $expires, $scope = null)
     {
         global $DB;
@@ -295,19 +386,33 @@ class moodle implements
         return true;
     }
 
+    /**
+     * @param string $refresh_token
+     * @return bool
+     */
     public function unsetRefreshToken($refresh_token)
     {
         global $DB;
         return $DB->delete_records('oauth_refresh_tokens', array('refresh_token' => $refresh_token));
     }
 
-    // plaintext passwords are bad!  Override this for your application
+    /**
+     * plaintext passwords are bad!  Override this for your application
+     *
+     * @param array $user
+     * @param string $password
+     * @return bool
+     */
     protected function checkPassword($user, $password)
     {
         $user = (object)$user;
         return validate_internal_user_password($user, $password);
     }
-
+    
+    /**
+     * @param string $username
+     * @return array|bool
+     */
     public function getUser($username)
     {
         global $DB;
@@ -321,6 +426,15 @@ class moodle implements
         return $userInfo;
     }
 
+    /**
+     * plaintext passwords are bad!  Override this for your application
+     *
+     * @param string $username
+     * @param string $password
+     * @param string $firstName
+     * @param string $lastName
+     * @return bool
+     */
     public function setUser($username, $password, $firstName = null, $lastName = null)
     {
         global $DB;
@@ -347,7 +461,10 @@ class moodle implements
         return true;
     }
 
-    /* ScopeInterface */
+    /**
+     * @param string $scope
+     * @return bool
+     */
     public function scopeExists($scope)
     {
         global $DB;
@@ -358,6 +475,10 @@ class moodle implements
         return $count == count($scope);
     }
 
+    /**
+     * @param mixed $client_id
+     * @return null|string
+     */
     public function getDefaultScope($client_id = null)
     {
         global $DB;
@@ -370,13 +491,21 @@ class moodle implements
         return null;
     }
 
-    /* JWTBearerInterface */
+    /**
+     * @param mixed $client_id
+     * @param $subject
+     * @return string
+     */
     public function getClientKey($client_id, $subject)
     {
         global $DB;
         return $DB->get_field('oauth_jwt', 'public_key' , array ('client_id'=>$client_id, 'subject'=>$subject));
     }
 
+    /**
+     * @param mixed $client_id
+     * @return bool|null
+     */
     public function getClientScope($client_id)
     {
         if (!$clientDetails = $this->getClientDetails($client_id)) {
@@ -390,31 +519,57 @@ class moodle implements
         return null;
     }
 
+    /**
+     * @param mixed $client_id
+     * @param $subject
+     * @param $audience
+     * @param $expires
+     * @param $jti
+     * @return array|null
+     */
     public function getJti($client_id, $subject, $audience, $expiration, $jti)
     {
         //TODO: Needs cassandra implementation.
         throw new \Exception('getJti() for the Moodle driver is currently unimplemented.');
     }
-
+    /**
+     * @param mixed $client_id
+     * @param $subject
+     * @param $audience
+     * @param $expires
+     * @param $jti
+     * @return bool
+     */
     public function setJti($client_id, $subject, $audience, $expiration, $jti)
     {
         //TODO: Needs cassandra implementation.
         throw new \Exception('setJti() for the Moodle driver is currently unimplemented.');
     }
 
-    /* PublicKeyInterface */
+    /**
+     * @param mixed $client_id
+     * @return mixed
+     */
     public function getPublicKey($client_id = null)
     {
         global $DB;
         return $DB->get_field_select('oauth_public_keys', 'public_key' , 'client_id=:client_id OR client_id IS NULL', array('client_id'=>$client_id), 'client_id IS NOT NULL DESC');
     }
 
+    /**
+     * @param mixed $client_id
+     * @return mixed
+     */
     public function getPrivateKey($client_id = null)
     {
         global $DB;
         return $DB->get_field_select('oauth_public_keys', 'private_key' , 'client_id=:client_id OR client_id IS NULL', array('client_id'=>$client_id), 'client_id IS NOT NULL DESC');
     }
 
+    /**
+     * @param mixed $client_id
+     * @return string
+     */
     public function getEncryptionAlgorithm($client_id = null)
     {
         global $DB;
@@ -429,6 +584,9 @@ class moodle implements
      * DDL to create OAuth2 database and tables for PDO storage
      *
      * @see https://github.com/dsquier/oauth2-server-php-mysql
+     *
+     * @param string $dbName
+     * @return string
      */
     public function getBuildSql($notused = false)
     {
@@ -472,6 +630,16 @@ class moodle implements
           PRIMARY KEY (refresh_token)
         );
 
+        CREATE TABLE {user} (
+          username            VARCHAR(80),
+          password            VARCHAR(80),
+          first_name          VARCHAR(80),
+          last_name           VARCHAR(80),
+          email               VARCHAR(80),
+          email_verified      BOOLEAN,
+          scope               VARCHAR(4000)
+        );
+
         CREATE TABLE mdl_oauth_scopes (
           scope               VARCHAR(80)  NOT NULL,
           is_default          BOOLEAN,
@@ -489,16 +657,6 @@ class moodle implements
           public_key           VARCHAR(2000),
           private_key          VARCHAR(2000),
           encryption_algorithm VARCHAR(100) DEFAULT 'RS256'
-        );
-
-        CREATE TABLE {user} (
-          username            VARCHAR(80),
-          password            VARCHAR(80),
-          first_name          VARCHAR(80),
-          last_name           VARCHAR(80),
-          email               VARCHAR(80),
-          email_verified      BOOLEAN,
-          scope               VARCHAR(4000)
         );
 
 ";
