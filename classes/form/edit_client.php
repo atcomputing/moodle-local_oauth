@@ -11,8 +11,6 @@ class edit_client extends moodleform {
     function definition() {
         global $CFG;
         $bform =& $this->_form;
-        $bform->addElement('hidden', 'action', 'add');
-        $bform->setType('action', PARAM_ACTION);
 
         // Adding the "general" fieldset, where all the common settings are showed
         $bform->addElement('header', 'general', get_string('general', 'form'));
@@ -22,10 +20,8 @@ class edit_client extends moodleform {
         $bform->setType('client_id', PARAM_TEXT);
         $bform->addHelpButton('client_id', 'client_id', 'local_oauth');
 
-        $action = optional_param('action', false, PARAM_TEXT);
-
-        if ($action == 'edit') {
-            $id = required_param('id', PARAM_TEXT);
+        $id = optional_param('id',null, PARAM_TEXT);
+        if (isset($id)){
             $bform->addElement('hidden', 'id', $id);
             $bform->setType('id', PARAM_INT);
             $bform->hardFreeze('client_id');
