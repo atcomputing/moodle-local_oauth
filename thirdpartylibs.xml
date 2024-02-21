@@ -3,8 +3,7 @@
     <library>
         <location>OAuth2</location>
         <name>oauth2-server-php</name>
-		<!-- TODO check if this real the version used. use submodule? -->
-        <version>1.14.1</version> 
+        <version>1.14.1</version>
         <license>MIT</license>
         <licenseversion>1</licenseversion>
     </library>

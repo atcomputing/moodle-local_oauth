@@ -1,23 +1,12 @@
 <?php
 
+// TODO move/rename to local_oauth\moodle_oauth_storage
 namespace local_oauth\storage;
 
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
 use \OAuth2\OpenID\Storage\UserClaimsInterface;
 use OAuth2\OpenID\Storage\AuthorizationCodeInterface as OpenIDAuthorizationCodeInterface;
 
-/**
- * Simple PDO storage for all storage types
- *
- * NOTE: This class is meant to get users started
- * quickly. If your application requires further
- * customization, extend this class or create your own.
- *
- * NOTE: Passwords are stored in plaintext, which is never
- * a good idea.  Be sure to override this for your application
- *
- * @author Brent Shaffer <bshafs at gmail dot com>
- */
 class moodle implements
     \OAuth2\Storage\AuthorizationCodeInterface,
     \OAuth2\Storage\AccessTokenInterface,
@@ -30,13 +19,22 @@ class moodle implements
     \OAuth2\OpenID\Storage\UserClaimsInterface,
     OpenIDAuthorizationCodeInterface
 {
+    # TODO have only 1 public private key pair for all clients?
     protected $config;
+
+    public array $claim_functions;
 
     public function __construct($connection, $config = array())
     {
         $this->config = $config;
+        $this->claim_functions = [
+            'profile' => new \local_oauth\claim\profile,
+            'email' => new \local_oauth\claim\email,
+            'address' => new \local_oauth\claim\address,
+            'phone' => new \local_oauth\claim\phone,
+            'enrolments' => new \local_oauth\claim\enrolments
+        ];
     }
-
     /**
      * @param string $client_id
      * @param null|string $client_secret
@@ -175,6 +173,18 @@ class moodle implements
         return true;
     }
 
+
+    /**
+     * @param $access_token
+     * @return bool
+     */
+    public function unsetAccessToken($access_token)
+    {
+        global $DB;
+        $DB->delete_records('oauth_access_tokens', ['access_token' => $access_token]);
+
+    }
+
     /* OAuth2\Storage\AuthorizationCodeInterface */
     /**
      * @param string $code
@@ -300,6 +310,10 @@ class moodle implements
         return $this->getUser($username);
     }
 
+    public function valid_claims(){
+        return array_keys($this->claim_functions);
+    }
+
     /**
      * @param mixed  $user_id
      * @param string $claims
@@ -307,42 +321,20 @@ class moodle implements
      */
     public function getUserClaims($user_id, $claims)
     {
-        if (!$userDetails = $this->getUserDetails($user_id)) {
+        if (!$user = \core_user::get_user($user_id)){
             return false;
         }
-
         $claims = explode(' ', trim($claims));
         $userClaims = array();
 
         // for each requested claim, if the user has the claim, set it in the response
-        $validClaims = explode(' ', self::VALID_CLAIMS);
+        $validClaims = $this->valid_claims();
         foreach ($validClaims as $validClaim) {
             if (in_array($validClaim, $claims)) {
-                if ($validClaim == 'address') {
-                    // address is an object with subfields
-                    $userClaims['address'] = $this->getUserClaim($validClaim, $userDetails['address'] ?: $userDetails);
-                } else {
-                    $userClaims = array_merge($userClaims, $this->getUserClaim($validClaim, $userDetails));
+                if (isset($this->claim_functions[$validClaim])){
+                    $userClaims = array_merge($userClaims, $this->claim_functions[$validClaim]->claim($user));
                 }
             }
-        }
-
-        return $userClaims;
-    }
-
-    /**
-     * @param string $claim
-     * @param array  $userDetails
-     * @return array
-     */
-    protected function getUserClaim($claim, $userDetails)
-    {
-        $userClaims = array();
-        $claimValuesString = constant(sprintf('self::%s_CLAIM_VALUES', strtoupper($claim)));
-        $claimValues = explode(' ', $claimValuesString);
-
-        foreach ($claimValues as $value) {
-            $userClaims[$value] = isset($userDetails[$value]) ? $userDetails[$value] : null;
         }
 
         return $userClaims;
@@ -397,8 +389,6 @@ class moodle implements
     }
 
     /**
-     * plaintext passwords are bad!  Override this for your application
-     *
      * @param array $user
      * @param string $password
      * @return bool
@@ -408,7 +398,7 @@ class moodle implements
         $user = (object)$user;
         return validate_internal_user_password($user, $password);
     }
-    
+
     /**
      * @param string $username
      * @return array|bool
@@ -421,14 +411,12 @@ class moodle implements
             return false;
         }
         $userInfo = (array) $userInfo;
-        $userInfo['user_id'] = $username;
+        $userInfo['user_id'] = $userInfo['id'];
 
         return $userInfo;
     }
 
     /**
-     * plaintext passwords are bad!  Override this for your application
-     *
      * @param string $username
      * @param string $password
      * @param string $firstName
@@ -467,12 +455,7 @@ class moodle implements
      */
     public function scopeExists($scope)
     {
-        global $DB;
-        $scope = explode(' ', $scope);
-        $whereIn = implode(',', array_fill(0, count($scope), '?'));
-        $count = $DB->count_records_sql('SELECT count(scope) as count FROM {oauth_scopes} WHERE scope IN ('.$whereIn.')');
-
-        return $count == count($scope);
+        return isset($claim_functions[$scope]);
     }
 
     /**

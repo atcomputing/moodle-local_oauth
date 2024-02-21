@@ -5,7 +5,12 @@
     "require": {
         "bshaffer/oauth2-server-php": "^1.14"
     },
-    "license": "GPL",
+    "autoload-dev": {
+        "psr-4": {
+            "Oauth2\\test\\": " vendor/bshaffer/oauth2-server-php/tests/"
+        }
+    },
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Rens Sikma",

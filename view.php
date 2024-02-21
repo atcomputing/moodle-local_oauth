@@ -15,24 +15,23 @@ echo $OUTPUT->heading(get_string('pluginname', 'local_oauth'));
 $action  = optional_param('action', '', PARAM_ALPHA);
 if (!empty($action)){
     $id = required_param('id', PARAM_TEXT);
+    $client = local_oauth\client::get_client_by_id($id);
 }
 if ($action == 'del'){
 
-    // Do delete
-    if (!$client_edit = $DB->get_record('oauth_clients', ['id' => $id])) {
+    // ask to delete
+    if (!$client){
         echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
     }
 
     $confirm  = new moodle_url($PAGE->url, ['action'=>"delconfirmed", 'id' => $id]);
     echo $OUTPUT->confirm(
-        get_string('confirmdeletestr', 'local_oauth', $client_edit->client_id),
+        get_string('confirmdeletestr', 'local_oauth', $client->client_id),
         $confirm,
         $PAGE->url,
     );
 }else if ($action == 'delconfirmed') {
-    if (!$DB->delete_records('oauth_clients', ['id' => $id])) {
-        print_error('delete_error', 'local_oauth');
-    }
+    $client->delete();
     echo $OUTPUT->notification(get_string('delok', 'local_oauth'), 'notifysuccess');
 }
 $clients = $DB->get_records('oauth_clients');
@@ -58,9 +57,13 @@ if (!empty($clients)) {
         $row[] = $client->scope;
         $row[] = $client->user_id;
 
-        $edit_link = "<a href=\"edit.php?id=".$client->id."\">".get_string('edit')."</a>";
-        $delete_link = "<a href=\"view.php?action=del&id=".$client->id."\">".get_string('delete')."</a>";
-        $row[] = $edit_link . "|" . $delete_link;
+        $edit_link = $OUTPUT->action_icon(
+            new \moodle_url('edit.php', ['id'=>$client->id]),
+            new \pix_icon('t/edit', get_string('edit'))) ;
+        $delete_link= $OUTPUT->action_icon(
+            new \moodle_url('view.php', ['id'=>$client->id, 'action' => 'del']),
+            new \pix_icon('i/trash', get_string('delete'))) ;
+        $row[] = $edit_link . $delete_link;
 
         $table->data[] = $row;
     }

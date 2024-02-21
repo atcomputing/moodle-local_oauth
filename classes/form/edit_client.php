@@ -10,6 +10,7 @@ class edit_client extends moodleform {
 
     function definition() {
         global $CFG;
+        $server = new \local_oauth\server();
         $bform =& $this->_form;
 
         // Adding the "general" fieldset, where all the common settings are showed
@@ -36,14 +37,37 @@ class edit_client extends moodleform {
         // Adding the rest of settings, spreading all them into this fieldset
         $bform->addElement('header', 'othersettings', get_string('othersettings', 'form'));
         $bform->setExpanded('othersettings', false);
-        $bform->addElement('text', 'grant_types', get_string('grant_types', 'local_oauth'), ['maxlength' => 80, 'size' => 45]);
-        $bform->setType('grant_types', PARAM_TEXT);
+        // $bform->addElement('text', 'grant_types', get_string('grant_types', 'local_oauth'), ['maxlength' => 80, 'size' => 45]);
+        // $bform->setType('grant_types', PARAM_TEXT);
+        $grant_options = $server->getGrantTypes();
+        foreach($grant_options as $key=>$value) {
+            $grant_options[$key] = $key . ": " . get_string($key."_explanation", "local_oauth");
+        }
+        $select = $bform->addElement('select', 'grant_types', get_string('grant_types', 'local_oauth'), $grant_options);
+        $bform->addHelpButton('grant_types', 'grant_types', 'local_oauth');
+        $select->setMultiple(true);
 
-        $bform->addElement('text', 'scope', get_string('scope', 'local_oauth'), ['maxlength' => 1333, 'size' => 45]);
-        $bform->setType('scope', PARAM_TEXT);
+        $scopes = $server->supported_scopes();
+        $scope_options = [];
+        foreach($scopes as $scope) {
+            $scope_options[$scope] = $scope;
+            // TODO add explantions, list included claims via:  get_string($scope."_explanation", "local_oauth");
+        }
+        $select = $bform->addElement('select', 'scope', get_string('scope', 'local_oauth'), $scope_options);
+        $select->setMultiple(true);
+        // $bform->addElement('text', 'scope', get_string('scope', 'local_oauth'), ['maxlength' => 1333, 'size' => 45]);
+        // $bform->setType('scope', PARAM_TEXT);
 
-        $bform->addElement('text', 'user_id', get_string('user_id', 'local_oauth'), ['maxlength' => 80, 'size' => 45]);
-        $bform->setType('user_id', PARAM_INT);
+        // TODO this shouldn't hide user_id if client_credentials + other is selected
+        $bform->hideIf('user_id', 'grant_types[]', 'not in', 'client_credentials');
+        $options = [
+            // 'multiple' => true,
+            'ajax' => 'core_search/form-search-user-selector',
+            'noselectionstring' => get_string('username')
+        ];
+        $bform->addElement('autocomplete', 'user_id', get_string('user_id', 'local_oauth'), [], $options);
+        // $bform->addElement('text', 'user_id', get_string('user_id', 'local_oauth'), ['maxlength' => 80, 'size' => 45]);
+        // $bform->setType('user_id', PARAM_INT);
 
         $bform->addElement('checkbox', 'use_email_aliases', get_string('use_email_aliases', 'local_oauth'));
         $bform->addHelpButton('use_email_aliases', 'use_email_aliases', 'local_oauth');
@@ -70,5 +94,6 @@ class edit_client extends moodleform {
         }
 
         return $errors;
+        # TODO valide redirect url
     }
 }
