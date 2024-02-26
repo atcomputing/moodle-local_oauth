@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>OAuth2</location>
+        <location>vendor/bshaffer/oauth2-server-php/</location>
         <name>oauth2-server-php</name>
         <version>1.14.1</version>
         <license>MIT</license>

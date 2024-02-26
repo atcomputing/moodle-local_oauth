@@ -10,7 +10,6 @@ $string['redirect_uri'] = 'Redirect URL';
 $string['grant_types'] = 'Grant Types';
 $string['scope'] = 'Scope';
 $string['user_id'] = 'User ID';
-$string['use_email_aliases'] = 'Send login and email as email';
 $string['no_confirmation'] = 'Do not prompt users to confirm authorized scope';
 
 $string['auth_question'] = 'Do you want to authorize <strong>{$a}</strong>?';
@@ -41,5 +40,4 @@ $string['refresh_token_explanation'] = 'let you refresh access token';
 $string['client_id_help'] = 'Identifier to be used from the client form in order to reference this provider. It has to be unique. For instance, a valid identifier could be "blog1" or "nodes".';
 $string['redirect_uri_help'] = 'URI where to redirect after login.';
 $string['grant_types_help'] = 'Choose how the user is allowed to login';
-$string['use_email_aliases_help'] = 'Choose if users has multiple logins for one email';
 $string['no_confirmation_help'] = 'The user will not be prompted to confirm authorized scopes, after the authentication was successfull';

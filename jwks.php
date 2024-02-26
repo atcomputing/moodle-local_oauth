@@ -1,9 +1,5 @@
 <?php
 
-/**
- * NO_DEBUG_DISPLAY - disable moodle specific debug messages and any errors in output
- */
-define('NO_DEBUG_DISPLAY', true);
 require('../../config.php');
 require_once 'vendor/autoload.php';
 

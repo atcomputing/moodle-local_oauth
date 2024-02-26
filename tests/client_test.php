@@ -20,7 +20,7 @@ class client_test extends \advanced_testcase {
         // test if return null if client does not exist
         $this->assertNull(client::get_client_by_id(0));
 
-        $client1 = new client('client', 'http://localhost', 'authorization_code', 'openid', "0", 0, 0);
+        $client1 = new client('client', 'http://localhost', ['authorization_code'], ['openid'], "0", 0);
         # test has no id until stored
         $this->assertNull($client1->id());
         $client1->store();
@@ -33,6 +33,7 @@ class client_test extends \advanced_testcase {
 
         $props1 = get_object_vars($client1);
         $props2 = get_object_vars($client2);
+        unset($props2['id']);
         # Test stored client from db is same as created except id(which is private)
         $this->assertEquals($props1,$props2);
         // test key creation

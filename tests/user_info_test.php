@@ -6,7 +6,6 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
 require_once($CFG->dirroot.'/local/oauth/classes/storage/moodle.php');
-require_once($CFG->dirroot.'/local/oauth/user_info.php');
 
 class user_info_test extends \advanced_testcase {
 

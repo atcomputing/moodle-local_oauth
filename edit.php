@@ -33,7 +33,6 @@ if ($form->is_cancelled()) {
     $client->grant_types = $fromform->grant_types;
     $client->scope = $fromform->scope;
     $client->user_id = !empty($fromform->user_id) ? $fromform->user_id: 0;
-    $client->use_email_aliases = isset($fromform->use_email_aliases) ? 1 : 0;
     $client->no_confirmation = isset($fromform->no_confirmation) ? 1 : 0;
     $client->store();
     redirect(new moodle_url('/local/oauth/view.php'));

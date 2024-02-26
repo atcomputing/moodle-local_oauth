@@ -19,7 +19,7 @@ class profile implements claim{
             // 'gender'
             // 'birthdate'
             // NOTE moodle timezone is 99 if you set timezone is same as server
-            'zoneinfo' => $user->timezone == '99' ? date_default_timezone_get() : $user['timezone'],
+            'zoneinfo' => $user->timezone == '99' ? date_default_timezone_get() : $user->timezone,
             // 'locale'
             'updated_at' => $user->timemodified
         ];

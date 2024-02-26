@@ -66,12 +66,6 @@ class edit_client extends moodleform {
             'noselectionstring' => get_string('username')
         ];
         $bform->addElement('autocomplete', 'user_id', get_string('user_id', 'local_oauth'), [], $options);
-        // $bform->addElement('text', 'user_id', get_string('user_id', 'local_oauth'), ['maxlength' => 80, 'size' => 45]);
-        // $bform->setType('user_id', PARAM_INT);
-
-        $bform->addElement('checkbox', 'use_email_aliases', get_string('use_email_aliases', 'local_oauth'));
-        $bform->addHelpButton('use_email_aliases', 'use_email_aliases', 'local_oauth');
-        $bform->setType('use_email_aliases', PARAM_BOOL);
 
         $bform->addElement('checkbox', 'no_confirmation', get_string('no_confirmation', 'local_oauth'));
         $bform->addHelpButton('no_confirmation', 'no_confirmation', 'local_oauth');

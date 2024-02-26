@@ -15,7 +15,7 @@ class server_test extends \advanced_testcase {
         $this->resetAfterTest(true);
 
         $server = new server();
-        $client = new client('client', 'http://localhost', ['authorization_code'], 'openid email address', "0", 0, 0);
+        $client = new client('client', 'http://localhost', ['authorization_code'], ['openid', 'email', 'address'], "0", 0);
         $client->store();
         $user = $this->getDataGenerator()->create_user([
             'address' => 'home',
@@ -62,7 +62,7 @@ class server_test extends \advanced_testcase {
         $user_info = $jwt->decode($id_token,$key);
         $this->assertEquals($user->id, $user_info['sub']);
 
-        var_export($user_info);
+        // var_export($user_info);
         // $info = $server->getStorage('user_claims')->getUserClaims($user->id,"address");
         // var_export($info);
     }
@@ -73,7 +73,7 @@ class server_test extends \advanced_testcase {
 
         $server = new server();
         $user = $this->getDataGenerator()->create_user([]);
-        $client = new client('client', 'http://localhost', ['client_credentials'], 'openid', $user->id, 0, 0);
+        $client = new client('client', 'http://localhost', ['client_credentials'], ['openid'], $user->id, 0);
         $client->store();
 
         // from: https://bshaffer.github.io/oauth2-server-php-docs/overview/openid-connect/

@@ -12,16 +12,14 @@ class client {
     public array $grant_types;
     public array $scope;
     public int $user_id;
-    public int $use_email_aliases; # TODO make bool
     public int $no_confirmation;
 
-    public function __construct($client_id, $redirect_uri, $grant_types, $scope, $user_id, $use_email_aliases, $no_confirmation){
+    public function __construct($client_id, $redirect_uri, $grant_types, $scope, $user_id, $no_confirmation){
         $this->client_id = $client_id;
         $this->redirect_uri = $redirect_uri;
         $this->grant_types = $grant_types;
         $this->scope = $scope;
         $this->user_id = $user_id;
-        $this->use_email_aliases = $use_email_aliases;
         $this->no_confirmation = $no_confirmation;
         $this->client_secret = self::generate_secret();
     }
@@ -48,7 +46,6 @@ class client {
             explode(" ", $row->grant_types),
             explode(" ", $row->scope),
             $row->user_id,
-            $row->use_email_aliases,
             $row->no_confirmation
         );
         $client->id = $row->id;
