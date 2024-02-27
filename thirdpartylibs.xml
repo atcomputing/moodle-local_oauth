@@ -7,4 +7,9 @@
         <license>MIT</license>
         <licenseversion>1</licenseversion>
     </library>
+    <library>
+        <location>vendor</location>
+        <name>Composer auto loading and plugins</name>
+        <license>MIT</license>
+    </library>
 </libraries>

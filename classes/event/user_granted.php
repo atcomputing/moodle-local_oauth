@@ -23,7 +23,6 @@
  */
 
 namespace local_oauth\event;
-defined('MOODLE_INTERNAL') || die();
 
 class user_granted extends \core\event\base {
 

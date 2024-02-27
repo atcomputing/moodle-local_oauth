@@ -1,6 +1,6 @@
 <?php
 
-// TODO move/rename to local_oauth\moodle_oauth_storage
+// TODO move/rename to local_oauth\moodle_oauth_storage.
 namespace local_oauth\storage;
 
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');

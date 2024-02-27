@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace local_oauth\form;
 

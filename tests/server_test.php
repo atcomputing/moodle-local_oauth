@@ -1,4 +1,26 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
+/**
+ * Plugin index file
+ *
+ * @package     local_oauth
+ * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace local_oauth;
 
@@ -10,8 +32,7 @@ require_once($CFG->dirroot.'/local/oauth/classes/storage/moodle.php');
 
 class server_test extends \advanced_testcase {
 
-    public function test_authorization_code_openid()
-    {
+    public function test_authorization_code_openid() {
         $this->resetAfterTest(true);
 
         $server = new server();
@@ -19,34 +40,34 @@ class server_test extends \advanced_testcase {
         $client->store();
         $user = $this->getDataGenerator()->create_user([
             'address' => 'home',
-            'email'=>'user1@example.com',
-            'username'=>'user1'
+            'email' => 'user1@example.com',
+            'username' => 'user1',
         ]);
 
-        // from: https://bshaffer.github.io/oauth2-server-php-docs/overview/openid-connect/
-        // create a request object to mimic an authorization code request
-        $request = new \OAuth2\Request(array(
+        // From: https://bshaffer.github.io/oauth2-server-php-docs/overview/openid-connect/ .
+        // Create a request object to mimic an authorization code request.
+        $request = new \OAuth2\Request([
             'client_id'     => 'client',
             'redirect_uri'  => 'http://localhost',
             'response_type' => 'code',
             'scope'         => 'openid email address',
             'state'         => 'xyz',
-        ));
+        ]);
 
         $response = new \OAuth2\Response();
         $server->handleAuthorizeRequest($request, $response, true, $user->id);
 
-        $redirect_url = $response->getHttpHeader('Location');
+        $redirecturl = $response->getHttpHeader('Location');
         $this->assertEmpty($response->getParameters('error'));
-        $this->assertNotNull($redirect_url);
+        $this->assertNotNull($redirecturl);
 
-        // parse the returned URL to get the authorization code
-        $parts = parse_url($redirect_url);
+        // Parse the returned URL to get the authorization code.
+        $parts = parse_url($redirecturl);
         parse_str($parts['query'], $query);
 
-        // pull the code from storage and verify an "id_token" was added
+        // Pull the code from storage and verify an "id_token" was added.
         $code = $server->getStorage('authorization_code')
-                       ->getAuthorizationCode($query['code']);
+            ->getAuthorizationCode($query['code']);
         $this->assertNotNull($code);
         $this->assertNotNull($code['authorization_code']);
         $this->assertEquals( $user->id, $code['user_id']);
@@ -54,20 +75,18 @@ class server_test extends \advanced_testcase {
         $this->assertNotNull($code['expires']);
         $this->assertEquals('openid email address', $code['scope']);
         $this->assertEquals('client', $code['client_id']);
-        $this->assertNotNull($code['id_token']); # TODO decode
-        $id_token = $code['id_token'];
+        $this->assertNotNull($code['id_token']);
+        $idtoken = $code['id_token'];
 
         $jwt = new \OAuth2\Encryption\Jwt();
         $key = $server->getStorage('public_key')->getPublicKey("client");
-        $user_info = $jwt->decode($id_token,$key);
-        $this->assertEquals($user->id, $user_info['sub']);
+        $userinfo = $jwt->decode($idtoken, $key);
+        $this->assertEquals($user->id, $userinfo['sub']);
 
-        // var_export($user_info);
-        // $info = $server->getStorage('user_claims')->getUserClaims($user->id,"address");
-        // var_export($info);
+        // TODO test more userinfo attributes.
     }
 
-    public function test_client_credentials_openid(){
+    public function test_client_credentials_openid() {
 
         $this->resetAfterTest(true);
 
@@ -76,22 +95,19 @@ class server_test extends \advanced_testcase {
         $client = new client('client', 'http://localhost', ['client_credentials'], ['openid'], $user->id, 0);
         $client->store();
 
-        // from: https://bshaffer.github.io/oauth2-server-php-docs/overview/openid-connect/
-        // create a request object to mimic an authorization code request
+        // From: https://bshaffer.github.io/oauth2-server-php-docs/overview/openid-connect/.
+        // Create a request object to mimic an authorization code request.
         $request = new \OAuth2\Request(
-            [], # query
-            [ 'grant_type'    => 'client_credentials', # request
-              // 'response_type'  => 'code',
-              # this only works because: allow_credentials_in_request_body=true
+            [], // Query.
+            [ 'grant_type'    => 'client_credentials', // Request.
+              // This only works because: allow_credentials_in_request_body=true.
               'client_id'     => 'client',
-              'client_secret' => $client->client_secret
+              'client_secret' => $client->client_secret,
             ],
-            [], # attributes
-            [], # cookies
-            [], # files
-            ['REQUEST_METHOD' => 'post'] # server
-            // [], # content
-            // ['AUTHORIZATION' => 'Basic '.base64_encode('client:'.$client->client_secret)], # headers
+            [], // Attributes.
+            [], // Cookies.
+            [], // Files.
+            ['REQUEST_METHOD' => 'post'] // Server.
         );
 
         $response = new \OAuth2\Response();
@@ -104,18 +120,12 @@ class server_test extends \advanced_testcase {
         $this->assertEquals($user->id, $authorization['user_id']);
     }
 
-    public function test_refresh_token(){
+    // TODO add test_refresh_token.
 
-        $this->resetAfterTest(true);
-        $server = new server();
-        // $access_token = new \OAuth2\ResponseType\AccessToken($storage);
-        // $token = $access_token->createAccessToken("client", $user->id, "openid profile email address phone enrolments");
-    }
-
-    public function test_grantTypes(){
+    public function test_granttypes() {
 
         $server = new server();
         $grants = $server->getGrantTypes();
-        $this->assertEquals(['authorization_code','client_credentials','user_credentials', 'refresh_token'], array_keys($grants));
+        $this->assertEquals(['authorization_code', 'client_credentials', 'user_credentials', 'refresh_token'], array_keys($grants));
     }
 }

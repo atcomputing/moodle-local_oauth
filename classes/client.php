@@ -1,43 +1,62 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Plugin index file
+ *
+ * @package     local_oauth
+ * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 namespace local_oauth;
 
-require_once($CFG->dirroot.'/config.php');
-
 class client {
-    public int $id; // has to be pulic now because the way its send to database in update
-    public string $client_id;
-    public string $client_secret;
-    public string $redirect_uri;
-    public array $grant_types;
+    public int $id; // Has to be pulic now because the way its send to database in update.
+    public string $clientid;
+    public string $clientsecret;
+    public string $redirecturi;
+    public array $granttypes;
     public array $scope;
-    public int $user_id;
-    public int $no_confirmation;
+    public int $userid;
+    public int $noconfirmation;
 
-    public function __construct($client_id, $redirect_uri, $grant_types, $scope, $user_id, $no_confirmation){
-        $this->client_id = $client_id;
-        $this->redirect_uri = $redirect_uri;
-        $this->grant_types = $grant_types;
+    public function __construct($clientid, $redirecturi, $granttypes, $scope, $userid, $noconfirmation) {
+        $this->clientid = $clientid;
+        $this->redirecturi = $redirecturi;
+        $this->granttypes = $granttypes;
         $this->scope = $scope;
-        $this->user_id = $user_id;
-        $this->no_confirmation = $no_confirmation;
-        $this->client_secret = self::generate_secret();
+        $this->userid = $userid;
+        $this->noconfirmation = $noconfirmation;
+        $this->clientsecret = self::generate_secret();
     }
 
-    public function id(){
-        if (isset($this->id)){
+    public function id() {
+        if (isset($this->id)) {
             return $this->id;
         }
         return null;
     }
 
-    // TODO use $storage->getClientDetails
-    public static function get_client_by_id($id){
+    // TODO Use $storage->getClientDetails instead .
+    public static function get_client_by_id($id) {
         global $DB;
 
-        $row = $DB->get_record('oauth_clients', array('id' => $id));
+        $row = $DB->get_record('oauth_clients', ['id' => $id]);
         if (!$row) {
-            return null  ;
+            return null;
         }
 
         $client = new Client(
@@ -49,61 +68,61 @@ class client {
             $row->no_confirmation
         );
         $client->id = $row->id;
-        $client->client_secret= $row->client_secret;
+        $client->clientsecret = $row->client_secret;
         return $client;
     }
 
-    public function store(){
+    public function store() {
         // TODO use $storatge->setClientDetails?
         global $DB;
         $row = (array) $this;
-        $row['grant_types'] = implode(" ", $this->grant_types);
+        $row['grant_types'] = implode(" ", $this->granttypes);
         $row['scope'] = implode(" ", $this->scope);
-        if (isset($this->id)){
-            unset($this->clien_id);
+        if (isset($this->id)) {
+            unset($this->clienid);
             if (!$DB->update_record('oauth_clients', $row)) {
                 print_error('update_error', 'local_oauth');
             }
-        }else{
+        } else {
             if (!$DB->insert_record('oauth_clients', $row)) {
                 print_error('insert_error', 'local_oauth');
             }
-            $this->generate_key_pair($this->client_id);
+            $this->generate_key_pair($this->clientid);
         }
     }
 
-    public function delete(){
+    public function delete() {
 
         global $DB;
         if (!$DB->delete_records('oauth_clients', ['id' => $this->id])) {
             print_error('delete_error', 'local_oauth');
         }
-        if (!$DB->delete_records('oauth_public_keys',['client_id'=>$this->client_id])){
+        if (!$DB->delete_records('oauth_public_keys', ['client_id' => $this->clientid])) {
             print_error('delete_error', 'local_oauth');
         }
     }
 
-    public static function generate_key_pair($client_id){
+    public static function generate_key_pair($clientid) {
         global $DB;
-        $config = array(
+        $config = [
             "digest_alg" => "sha512",
             "private_key_bits" => 1028,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
-        // Create the private and public key
+        ];
+        // Create the private and public key.
         $res = openssl_pkey_new($config);
 
-        // Extract the private key from $res to $privKey
-        openssl_pkey_export($res, $privKey);
+        // Extract the private key from $res to $privkey.
+        openssl_pkey_export($res, $privkey);
 
-        // Extract the public key from $res to $pubKey
-        $pubKey = openssl_pkey_get_details($res);
-        $pubKey = $pubKey["key"];
+        // Extract the public key from $res to $pubkey.
+        $pubkey = openssl_pkey_get_details($res);
+        $pubkey = $pubkey["key"];
 
         $record = new \stdClass();
-        $record->client_id =  $client_id;
-        $record->public_key = $pubKey;
-        $record->private_key  = $privKey;
+        $record->client_id = $clientid;
+        $record->public_key = $pubkey;
+        $record->private_key  = $privkey;
 
         if (!$DB->insert_record('oauth_public_keys', $record)) {
             print_error('insert_error', 'local_oauth');
@@ -111,18 +130,18 @@ class client {
     }
 
     public static function generate_secret() {
-        // Get a whole bunch of random characters from the OS
+        // Get a whole bunch of random characters from the OS.
         $fp = fopen('/dev/urandom', 'rb');
         $entropy = fread($fp, 32);
         fclose($fp);
 
-        // Takes our binary entropy, and concatenates a string which represents the current time to the microsecond
+        // Takes our binary entropy, and concatenates a string which represents the current time to the microsecond.
         $entropy .= uniqid(mt_rand(), true);
 
-        // Hash the binary entropy
+        // Hash the binary entropy.
         $hash = hash('sha512', $entropy);
 
-        // Chop and send the first 80 characters back to the client
+        // Chop and send the first 80 characters back to the client.
         return substr($hash, 0, 48);
     }
 }
