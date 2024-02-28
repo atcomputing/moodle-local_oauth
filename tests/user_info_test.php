@@ -27,10 +27,12 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
-require_once($CFG->dirroot.'/local/oauth/classes/storage/moodle.php');
 
 class user_info_test extends \advanced_testcase {
 
+    /**
+     * @covers \local\oauth::
+     */
     public function test_userinfo() {
 
         $this->resetAfterTest(true);
@@ -47,7 +49,7 @@ class user_info_test extends \advanced_testcase {
         $user = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($user->id, $course->id);
 
-        $storage = new \local_oauth\storage\moodle([]);
+        $storage = new \local_oauth\storage_moodle([]);
 
         $accesstoken = new \OAuth2\ResponseType\AccessToken($storage);
         $token = $accesstoken->createAccessToken("client", $user->id, "openid profile email address phone enrolments");

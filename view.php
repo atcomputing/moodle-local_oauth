@@ -39,19 +39,20 @@ if (!empty($action)) {
     $client = local_oauth\client::get_client_by_id($id);
 }
 if ($action == 'del') {
-
     // Ask to delete.
     if (!$client) {
         echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
     }
 
-    $confirm  = new moodle_url($PAGE->url, ['action' => "delconfirmed", 'id' => $id]);
+    $confirm  = new moodle_url($PAGE->url,
+        ['action' => "delconfirmed", 'id' => $id, 'sesskey' => sesskey()]);
     echo $OUTPUT->confirm(
-        get_string('confirmdeletestr', 'local_oauth', $client->client_id),
+        get_string('confirmdeletestr', 'local_oauth', $client->clientid),
         $confirm,
         $PAGE->url,
     );
 } else if ($action == 'delconfirmed') {
+    require_sesskey();
     $client->delete();
     echo $OUTPUT->notification(get_string('delok', 'local_oauth'), 'notifysuccess');
 }

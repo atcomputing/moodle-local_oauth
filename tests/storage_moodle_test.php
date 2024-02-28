@@ -22,21 +22,25 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_oauth\storage;
+namespace local_oauth;
 
 defined('MOODLE_INTERNAL') || die();
 
-
 global $CFG;
-require_once($CFG->dirroot.'/local/oauth/classes/storage/moodle.php');
+
+require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
+
 
 // TODO include test from vendor/bshaffer/oauth2-server-php/test for storage.
 
-class moodle_test extends \advanced_testcase {
+class storage_moodle_test extends \advanced_testcase {
 
+    /**
+     * @covers \local\oauth\storage_moodle::get_userDetails
+     */
     public function test_user() {
         $this->resetAfterTest(true);
-        $storage = new moodle([]);
+        $storage = new storage_moodle([]);
         $user = $this->getDataGenerator()->create_user([]);
 
         $details = $storage->getUserDetails($user->username);

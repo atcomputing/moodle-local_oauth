@@ -24,10 +24,6 @@
 
 namespace local_oauth;
 
-// TODO can this be removed
-require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
-\OAuth2\Autoloader::register();
-
 class server  extends \OAuth2\Server {
 
     // TODO Modify AuthorizeController so it add all claims in id_token.
@@ -37,19 +33,23 @@ class server  extends \OAuth2\Server {
     public function __construct() {
         global $CFG;
 
-        $storage = new \local_oauth\storage\moodle([]);
+        $storage = new \local_oauth\storage_moodle([]);
 
         $config = [
+            // TODO Does this work behind revers proxy.
+            'issuer' => $CFG->wwwroot,
+            'use_openid_connect'       => true,
+            'enforce_state'            => true,
+            // phpcs:disable Squiz.PHP.CommentedOutCode.Found
+            // phpcs:disable moodle.Commenting.InlineComment.NotCapital
             // 'use_jwt_access_tokens'        => false,
             // 'jwt_extra_payload_callable' => null,
             // 'store_encrypted_token_string' => true,
-            'use_openid_connect'       => true,
             // 'id_lifetime'              => 3600,
             // 'access_lifetime'          => 3600,
             // 'www_realm'                => 'Service',
             // 'token_param_name'         => 'access_token',
             // 'token_bearer_header_name' => 'Bearer',
-            'enforce_state'            => true,
             // 'require_exact_redirect_uri' => true,
             // 'allow_implicit'           => false,
             // 'enforce_pkce'             => false,
@@ -58,8 +58,6 @@ class server  extends \OAuth2\Server {
             // 'always_issue_new_refresh_token' => false,
             // 'unset_refresh_token_after_use' => true,
 
-            // TODO Does this work behind revers proxy.
-            'issuer' => $CFG->wwwroot,
         ];
         $granttypes = [
             'authorization_code' => new \OAuth2\OpenID\GrantType\AuthorizationCode($storage),

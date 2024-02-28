@@ -22,6 +22,7 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once('../../config.php');
+require_once('vendor/autoload.php');
 require_once($CFG->libdir.'/adminlib.php');
 
 require_login();
@@ -38,21 +39,19 @@ if (isset($id)) {
         echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
     }
 } else {
-    $client = new local_oauth\client( "", "", ["authorization_code"], ["openid", "profile"], "0", 0, 0);
+    $client = new local_oauth\client( "", "", ["authorization_code"], ["openid", "profile"], "0", 0);
 }
 $form = new \local_oauth\form\edit_client();
 
 if ($form->is_cancelled()) {
     redirect(new moodle_url('/local/oauth/view.php'));
-} else if ($fromform = $form->get_data() && confirm_sesskey()) {
+} else if ($fromform = $form->get_data()) {
+    require_sesskey();
     if (isset($fromform->client_id)) {
-        $client->client_id = $fromform->client_id;
+        $client->clientid = $fromform->client_id;
     }
-    echo 'before:';
-    var_export($fromform->user_id);
-    echo ':after';
-    $client->redirect_uri = $fromform->redirect_uri;
-    $client->grant_types = $fromform->grant_types;
+    $client->redirecturi = $fromform->redirect_uri;
+    $client->granttypes = $fromform->grant_types;
     $client->scope = $fromform->scope;
     $client->user_id = !empty($fromform->user_id) ? $fromform->user_id : 0;
     $client->no_confirmation = isset($fromform->no_confirmation) ? 1 : 0;

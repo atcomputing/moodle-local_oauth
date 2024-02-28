@@ -73,20 +73,21 @@ class client {
     }
 
     public function store() {
-        // TODO use $storatge->setClientDetails?
+        // Can't use $storatge->setClientDetails because that is using no_confirmation?
         global $DB;
-        $row = (array) $this;
-        $row['grant_types'] = implode(" ", $this->granttypes);
-        $row['scope'] = implode(" ", $this->scope);
+        $row = [
+            'client_id' => $this->clientid,
+            'client_secret' => $this->clientsecret,
+            'redirect_uri' => $this->redirecturi,
+            'grant_types' => implode(" ", $this->granttypes),
+            'scope' => implode(" ", $this->scope),
+            'user_id' => $this->userid,
+            'no_confirmation' => $this->noconfirmation,
+        ];
         if (isset($this->id)) {
-            unset($this->clienid);
-            if (!$DB->update_record('oauth_clients', $row)) {
-                print_error('update_error', 'local_oauth');
-            }
+            $DB->update_record('oauth_clients', $row);
         } else {
-            if (!$DB->insert_record('oauth_clients', $row)) {
-                print_error('insert_error', 'local_oauth');
-            }
+            $DB->insert_record('oauth_clients', $row);
             $this->generate_key_pair($this->clientid);
         }
     }
@@ -94,12 +95,8 @@ class client {
     public function delete() {
 
         global $DB;
-        if (!$DB->delete_records('oauth_clients', ['id' => $this->id])) {
-            print_error('delete_error', 'local_oauth');
-        }
-        if (!$DB->delete_records('oauth_public_keys', ['client_id' => $this->clientid])) {
-            print_error('delete_error', 'local_oauth');
-        }
+        $DB->delete_records('oauth_clients', ['id' => $this->id]);
+        $DB->delete_records('oauth_public_keys', ['client_id' => $this->clientid]);
     }
 
     public static function generate_key_pair($clientid) {
@@ -124,9 +121,7 @@ class client {
         $record->public_key = $pubkey;
         $record->private_key  = $privkey;
 
-        if (!$DB->insert_record('oauth_public_keys', $record)) {
-            print_error('insert_error', 'local_oauth');
-        }
+        $DB->insert_record('oauth_public_keys', $record);
     }
 
     public static function generate_secret() {

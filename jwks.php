@@ -29,7 +29,7 @@ require_once('vendor/autoload.php');
 
 use OAuth2\Encryption\Jwt;
 
-$storage = new \local_oauth\storage\moodle([]);
+$storage = new \local_oauth\storage_moodle([]);
 
 $jsondata = ['keys' => []];
 $keys = $DB->get_records('oauth_public_keys', null, '', 'public_key');

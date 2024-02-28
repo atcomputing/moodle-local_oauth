@@ -28,10 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
-require_once($CFG->dirroot.'/local/oauth/classes/storage/moodle.php');
-
 class server_test extends \advanced_testcase {
 
+    /**
+     * @covers \local\oauth\server::
+     */
     public function test_authorization_code_openid() {
         $this->resetAfterTest(true);
 
@@ -86,6 +87,9 @@ class server_test extends \advanced_testcase {
         // TODO test more userinfo attributes.
     }
 
+    /**
+     * @covers \local\oauth\server::
+     */
     public function test_client_credentials_openid() {
 
         $this->resetAfterTest(true);
@@ -102,7 +106,7 @@ class server_test extends \advanced_testcase {
             [ 'grant_type'    => 'client_credentials', // Request.
               // This only works because: allow_credentials_in_request_body=true.
               'client_id'     => 'client',
-              'client_secret' => $client->client_secret,
+              'client_secret' => $client->clientsecret,
             ],
             [], // Attributes.
             [], // Cookies.
@@ -122,6 +126,9 @@ class server_test extends \advanced_testcase {
 
     // TODO add test_refresh_token.
 
+    /**
+     * @covers \local\oauth\server::
+     */
     public function test_granttypes() {
 
         $server = new server();

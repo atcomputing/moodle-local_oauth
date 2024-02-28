@@ -25,20 +25,19 @@ namespace local_oauth;
 
 defined('MOODLE_INTERNAL') || die();
 
+
 global $CFG;
+
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
-require_once($CFG->dirroot.'/local/oauth/classes/storage/moodle.php');
-/*
- * @coversDefaultClass \local_oauth\client
- */
+
 class client_test extends \advanced_testcase {
-    /*
-     * TeST
-     * @covers ::execute
+
+    /**
+     * @covers \local\oauth\client::__construct
      */
     public function test_constructor() {
         global $DB;
-        $storage = new \local_oauth\storage\moodle([]);
+        $storage = new \local_oauth\storage_moodle([]);
 
         $this->resetAfterTest(true);
 
