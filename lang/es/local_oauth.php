@@ -43,9 +43,6 @@ $string['saveok'] = 'El cliente se ha guardado correctamente';
 $string['confirmdeletestr'] = 'Está seguro que quiere eliminar el cliente {$a}?';
 $string['delok'] = 'El cliente se ha eliminado correctamente';
 $string['client_id_existing_error'] = 'El identificador de cliente especificado ya existe, seleccione otro';
-$string['insert_error'] = 'Se ha producido un error creando el cliente';
-$string['update_error'] = 'Se ha producido un error actualizando la información del cliente';
-$string['delete_error'] = 'Se ha producido un error eliminando el cliente';
 
 $string['event_user_not_granted'] = 'Usuario no autorizado';
 $string['event_user_granted'] = 'Usuario autorizado';

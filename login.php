@@ -25,6 +25,7 @@
 
 require('../../config.php');
 require_once(__DIR__.'/lib.php');
+require_once('vendor/autoload.php');
 
 $clientid = required_param('client_id', PARAM_RAW);
 $responsetype = required_param('response_type', PARAM_RAW);

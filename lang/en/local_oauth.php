@@ -44,9 +44,6 @@ $string['saveok'] = 'Client successfully saved';
 $string['confirmdeletestr'] = 'Are you sure you want to delete client {$a}?';
 $string['delok'] = 'Client successfully deleted';
 $string['client_id_existing_error'] = 'The Client identifier specified already exists, please choose another one';
-$string['insert_error'] = 'Error occurred creating client';
-$string['update_error'] = 'Error occurred updating client data';
-$string['delete_error'] = 'Error occurred deleting client';
 
 $string['event_user_not_granted'] = 'User not granted';
 $string['event_user_granted'] = 'User granted';
@@ -58,7 +55,8 @@ $string['client_credentials_explanation'] = 'Lets application login as a user';
 $string['user_credentials_explanation'] = 'Lets application login via sending Users password ';
 $string['refresh_token_explanation'] = 'let you refresh access token';
 
-$string['client_id_help'] = 'Identifier to be used from the client form in order to reference this provider. It has to be unique. For instance, a valid identifier could be "blog1" or "nodes".';
+$string['client_id_help'] = 'Identifier to be used from the client form in order to reference this provider.' .
+   'It has to be unique. For instance, a valid identifier could be "blog1" or "nodes".';
 $string['redirect_uri_help'] = 'URI where to redirect after login.';
 $string['grant_types_help'] = 'Choose how the user is allowed to login';
 $string['no_confirmation_help'] = 'The user will not be prompted to confirm authorized scopes, after the authentication was successfull';

@@ -25,6 +25,7 @@
 // phpcs:disable moodle.Files.RequireLogin.Missing
 
 require_once('../../config.php');
+require_once('vendor/autoload.php');
 
 \core\session\manager::write_close();
 

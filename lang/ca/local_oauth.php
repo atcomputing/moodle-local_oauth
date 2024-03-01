@@ -43,14 +43,12 @@ $string['saveok'] = 'El client s\'ha desat correctament';
 $string['confirmdeletestr'] = 'Segur que voleu eliminar el client {$a}?';
 $string['delok'] = 'El client s\'ha eliminat correctament';
 $string['client_id_existing_error'] = 'L\'identificador de client especificat ja existeix, cal seleccionar-ne un altre';
-$string['insert_error'] = 'Error creant el client';
-$string['update_error'] = 'Error actualitzant la informació del client';
-$string['delete_error'] = 'Error eliminant el client';
 
 $string['event_user_not_granted'] = 'Usuari/ària no autoritzat';
 $string['event_user_granted'] = 'Usuari/ària autoritzat';
 $string['event_user_info_request'] = 'Petició de dades d\'usuari/ària';
 $string['event_user_info_request_failed'] = 'Error en la petició de dades d\'usuari/ària';
 
-$string['client_id_help'] = 'ID de l\'aplicació per fer servir al formulari del client (XTECBlocs o Nodes) per tal de referenciar el proveïdor. Ha de ser únic. Per exemple, un ID de l\'aplicació vàlid pot ser "blog1" o "nodes".';
+$string['client_id_help'] = 'ID de l\'aplicació per fer servir al formulari del client (XTECBlocs o Nodes) per tal de referenciar el proveïdor. Ha de ser únic.' .
+  'Per exemple, un ID de l\'aplicació vàlid pot ser "blog1" o "nodes".';
 $string['redirect_uri_help'] = 'URI a on redirigir després d\'autenticar-se.';

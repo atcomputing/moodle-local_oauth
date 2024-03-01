@@ -79,15 +79,16 @@ class edit_client extends moodleform {
 
         // TODO This shouldn't hide userid if client_credentials + other is selected.
         $bform->hideIf('userid', 'granttypes[]', 'not in', 'client_credentials');
+
         $options = [
             'ajax' => 'core_search/form-search-user-selector',
             'noselectionstring' => get_string('username'),
         ];
         $bform->addElement('autocomplete', 'userid', get_string('user_id', 'local_oauth'), [], $options);
 
-        $bform->addElement('checkbox', 'no_confirmation', get_string('no_confirmation', 'local_oauth'));
-        $bform->addHelpButton('no_confirmation', 'no_confirmation', 'local_oauth');
-        $bform->setType('no_confirmation', PARAM_BOOL);
+        $bform->addElement('checkbox', 'noconfirmation', get_string('no_confirmation', 'local_oauth'));
+        $bform->addHelpButton('noconfirmation', 'no_confirmation', 'local_oauth');
+        $bform->setType('noconfirmation', PARAM_BOOL);
 
         $this->add_action_buttons();
 

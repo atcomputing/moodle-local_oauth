@@ -47,13 +47,13 @@ if ($form->is_cancelled()) {
     redirect(new moodle_url('/local/oauth/view.php'));
 } else if ($fromform = $form->get_data()) {
     require_sesskey();
-    if (isset($fromform->client_id)) {
-        $client->clientid = $fromform->client_id;
+    if (isset($fromform->clientid)) {
+        $client->clientid = $fromform->clientid;
     }
-    $client->redirecturi = $fromform->redirect_uri;
-    $client->granttypes = $fromform->grant_types;
+    $client->redirecturi = $fromform->redirecturi;
+    $client->granttypes = $fromform->granttypes;
     $client->scope = $fromform->scope;
-    $client->user_id = !empty($fromform->user_id) ? $fromform->user_id : 0;
+    $client->user_id = !empty($fromform->userid) ? $fromform->userid : 0;
     $client->no_confirmation = isset($fromform->no_confirmation) ? 1 : 0;
     $client->store();
     redirect(new moodle_url('/local/oauth/view.php'));

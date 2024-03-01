@@ -23,6 +23,7 @@
  */
 // phpcs:disable moodle.Files.RequireLogin.Missing
 require_once('../../config.php');
+require_once('vendor/autoload.php');
 
 $server = new \local_oauth\server();
 
