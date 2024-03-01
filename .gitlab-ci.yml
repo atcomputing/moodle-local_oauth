@@ -1,5 +1,6 @@
 ---
 stages:
+  - prepare
   - test
   - publish
 
@@ -50,6 +51,11 @@ default:
     # install moodle
     # - moodle-plugin-ci install --db-host db 
     # - '{ php -S 0.0.0.0:8000 -t "$CI_PROJECT_DIR/moodle" >/dev/null 2>&1 & }'
+
+install dependencies:
+  stage: prepare
+  script:
+    composer install
 
 test:
   stage: test
