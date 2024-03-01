@@ -67,6 +67,7 @@ test:
     - moodle-plugin-ci install --moodle=/opt/moodle  --db-name moodle --db-host db
     - moodle-plugin-ci phplint $CI_PROJECT_DIR
     - moodle-plugin-ci phpunit $CI_PROJECT_DIR
+    - moodle-plugin-ci validate $CI_PROJECT_DIR
     - moodle-plugin-ci behat --auto-rerun 0 --profile chrome $CI_PROJECT_DIR
 
 
@@ -79,7 +80,6 @@ validate:
   script:
     - composer install
     # - validate-version # TODO complains about CHANGELOG.md, even if it exist double check
-    # - moodle-plugin-ci validate $CI_PROJECT_DIR # need moodle installed
     - moodle-plugin-ci savepoints $CI_PROJECT_DIR
 
     # TODO
