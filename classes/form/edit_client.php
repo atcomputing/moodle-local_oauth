@@ -102,7 +102,7 @@ class edit_client extends moodleform {
             return $errors;
         }
 
-        if ($DB->record_exists('oauth_clients', ['client_id' => $data['client_id']])) {
+        if ($DB->record_exists('local_oauth_clients', ['client_id' => $data['client_id']])) {
             $errors['client_id'] = get_string('client_id_existing_error', 'local_oauth');
         }
 

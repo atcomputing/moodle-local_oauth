@@ -49,7 +49,7 @@ class client_test extends \advanced_testcase {
         $this->assertNull($client1->id());
         $client1->store();
 
-        $record1 = $DB->get_record('oauth_clients', ['client_id' => 'client']);
+        $record1 = $DB->get_record('local_oauth_clients', ['client_id' => 'client']);
         $client2 = client::get_client_by_id($record1->id);
 
         // Test stored client has id.
@@ -66,7 +66,7 @@ class client_test extends \advanced_testcase {
 
         $client2->delete();
 
-        $record2 = $DB->get_record('oauth_clients', ['client_id' => 'client']);
+        $record2 = $DB->get_record('local_oauth_clients', ['client_id' => 'client']);
 
         // Test client deleted.
         $this->assertFalse($record2);

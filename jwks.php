@@ -32,7 +32,7 @@ use OAuth2\Encryption\Jwt;
 $storage = new \local_oauth\storage_moodle([]);
 
 $jsondata = ['keys' => []];
-$keys = $DB->get_records('oauth_public_keys', null, '', 'public_key');
+$keys = $DB->get_records('local_oauth_public_keys', null, '', 'public_key');
 foreach ($keys as $key) {
     $pubkey = openssl_pkey_get_public($key->public_key);
     $keyinfo = openssl_pkey_get_details($pubkey);

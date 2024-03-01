@@ -62,7 +62,7 @@ class storage_moodle implements
      */
     public function checkClientCredentials($client_id, $client_secret = null) {
         global $DB;
-        $client_secret_db = $DB->get_field('oauth_clients', 'client_secret', ['client_id' => $client_id]);
+        $client_secret_db = $DB->get_field('local_oauth_clients', 'client_secret', ['client_id' => $client_id]);
         return $client_secret == $client_secret_db;
     }
 
@@ -75,7 +75,7 @@ class storage_moodle implements
      */
     public function isPublicClient($client_id) {
         global $DB;
-        $client = $DB->get_record('oauth_clients', ['client_id' => $client_id]);
+        $client = $DB->get_record('local_oauth_clients', ['client_id' => $client_id]);
         if (!$client) {
             return false;
         }
@@ -91,7 +91,7 @@ class storage_moodle implements
      */
     public function getClientDetails($client_id) {
         global $DB;
-        $client = $DB->get_record('oauth_clients', ['client_id' => $client_id]);
+        $client = $DB->get_record('local_oauth_clients', ['client_id' => $client_id]);
         if (!$client) {
             return false;
         }
@@ -116,13 +116,13 @@ class storage_moodle implements
         $scope = null,
         $user_id = null) {
         global $DB;
-        if ($client = $DB->get_record('oauth_clients', ['client_id' => $client_id])) {
+        if ($client = $DB->get_record('local_oauth_clients', ['client_id' => $client_id])) {
             $client->client_secret = $client_secret;
             $client->redirect_uri = $redirect_uri;
             $client->grant_types = $grant_types;
             $client->scope = $scope;
             $client->user_id = $user_id;
-            $DB->update_record('oauth_clients', $client);
+            $DB->update_record('local_oauth_clients', $client);
         } else {
             $client = new \StdClass();
             $client->client_secret = $client_secret;
@@ -131,7 +131,7 @@ class storage_moodle implements
             $client->scope = $scope;
             $client->user_id = $user_id;
             $client->client_id = $client_id;
-            $DB->insert_record('oauth_clients', $client);
+            $DB->insert_record('local_oauth_clients', $client);
         }
 
         return true;
@@ -160,7 +160,7 @@ class storage_moodle implements
      */
     public function getAccessToken($access_token) {
         global $DB;
-        $token = $DB->get_record('oauth_access_tokens', ['access_token' => $access_token]);
+        $token = $DB->get_record('local_oauth_access_tokens', ['access_token' => $access_token]);
         if (!$token) {
             return false;
         }
@@ -180,12 +180,12 @@ class storage_moodle implements
         global $DB;
 
         // If it exists, update it.
-        if ($token = $DB->get_record('oauth_access_tokens', ['access_token' => $access_token])) {
+        if ($token = $DB->get_record('local_oauth_access_tokens', ['access_token' => $access_token])) {
             $token->client_id = $client_id;
             $token->expires = $expires;
             $token->user_id = $user_id;
             $token->scope = $scope;
-            $DB->update_record('oauth_access_tokens', $token);
+            $DB->update_record('local_oauth_access_tokens', $token);
         } else {
             $token = new \StdClass();
             $token->client_id = $client_id;
@@ -193,7 +193,7 @@ class storage_moodle implements
             $token->user_id = $user_id;
             $token->scope = $scope;
             $token->access_token = $access_token;
-            $DB->insert_record('oauth_access_tokens', $token);
+            $DB->insert_record('local_oauth_access_tokens', $token);
         }
         return true;
     }
@@ -205,7 +205,7 @@ class storage_moodle implements
      */
     public function unsetAccessToken($access_token) {
         global $DB;
-        $DB->delete_records('oauth_access_tokens', ['access_token' => $access_token]);
+        $DB->delete_records('local_oauth_access_tokens', ['access_token' => $access_token]);
 
     }
 
@@ -216,7 +216,7 @@ class storage_moodle implements
      */
     public function getAuthorizationCode($code) {
         global $DB;
-        $code = $DB->get_record('oauth_authorization_codes', ['authorization_code' => $code]);
+        $code = $DB->get_record('local_oauth_authorization_codes', ['authorization_code' => $code]);
         if (!$code) {
             return false;
         }
@@ -253,13 +253,13 @@ class storage_moodle implements
         }
 
         // If it exists, update it.
-        if ($auth_code = $DB->get_record('oauth_authorization_codes', ['authorization_code' => $code])) {
+        if ($auth_code = $DB->get_record('local_oauth_authorization_codes', ['authorization_code' => $code])) {
             $auth_code->client_id = $client_id;
             $auth_code->user_id = $user_id;
             $auth_code->redirect_uri = $redirect_uri;
             $auth_code->expires = $expires;
             $auth_code->scope = $scope;
-            $DB->update_record('oauth_authorization_codes', $auth_code);
+            $DB->update_record('local_oauth_authorization_codes', $auth_code);
         } else {
             $auth_code = new \StdClass();
             $auth_code->client_id = $client_id;
@@ -268,7 +268,7 @@ class storage_moodle implements
             $auth_code->expires = $expires;
             $auth_code->scope = $scope;
             $auth_code->authorization_code = $code;
-            $DB->insert_record('oauth_authorization_codes', $auth_code);
+            $DB->insert_record('local_oauth_authorization_codes', $auth_code);
         }
         return true;
     }
@@ -294,14 +294,14 @@ class storage_moodle implements
         global $DB;
 
         // If it exists, update it.
-        if ($auth_code = $DB->get_record('oauth_authorization_codes', ['authorization_code' => $code])) {
+        if ($auth_code = $DB->get_record('local_oauth_authorization_codes', ['authorization_code' => $code])) {
             $auth_code->client_id = $client_id;
             $auth_code->user_id = $user_id;
             $auth_code->redirect_uri = $redirect_uri;
             $auth_code->expires = $expires;
             $auth_code->scope = $scope;
             $auth_code->id_token = $id_token;
-            $DB->update_record('oauth_authorization_codes', $auth_code);
+            $DB->update_record('local_oauth_authorization_codes', $auth_code);
         } else {
             $auth_code = new \StdClass();
             $auth_code->client_id = $client_id;
@@ -311,7 +311,7 @@ class storage_moodle implements
             $auth_code->scope = $scope;
             $auth_code->id_token = $id_token;
             $auth_code->authorization_code = $code;
-            $DB->insert_record('oauth_authorization_codes', $auth_code);
+            $DB->insert_record('local_oauth_authorization_codes', $auth_code);
         }
         return true;
     }
@@ -322,7 +322,7 @@ class storage_moodle implements
      */
     public function expireAuthorizationCode($code) {
         global $DB;
-        return $DB->delete_records('oauth_authorization_codes', ['authorization_code' => $code]);
+        return $DB->delete_records('local_oauth_authorization_codes', ['authorization_code' => $code]);
     }
 
     /**
@@ -382,7 +382,7 @@ class storage_moodle implements
      */
     public function getRefreshToken($refresh_token) {
         global $DB;
-        $token = $DB->get_record('oauth_refresh_tokens', ['refresh_token' => $refresh_token]);
+        $token = $DB->get_record('local_oauth_refresh_tokens', ['refresh_token' => $refresh_token]);
         if (!$token) {
             return false;
         }
@@ -407,7 +407,7 @@ class storage_moodle implements
         $token->user_id = $user_id;
         $token->expires = $expires;
         $token->scope = $scope;
-        $DB->insert_record('oauth_refresh_tokens', $token);
+        $DB->insert_record('local_oauth_refresh_tokens', $token);
 
         return true;
     }
@@ -418,7 +418,7 @@ class storage_moodle implements
      */
     public function unsetRefreshToken($refresh_token) {
         global $DB;
-        return $DB->delete_records('oauth_refresh_tokens', ['refresh_token' => $refresh_token]);
+        return $DB->delete_records('local_oauth_refresh_tokens', ['refresh_token' => $refresh_token]);
     }
 
     /**
@@ -437,6 +437,7 @@ class storage_moodle implements
      */
     public function getUser($username) {
         global $DB;
+        //TODO dont user use DB direcly for accesing user
         $userinfo = $DB->get_record('user', ['username' => $username]);
         if (!$userinfo) {
             return false;
@@ -463,7 +464,7 @@ class storage_moodle implements
      */
     public function getDefaultScope($client_id = null) {
         global $DB;
-        $scope = $DB->get_fieldset_select('oauth_scopes', 'scope', 'is_default = :is_default', ['is_default' => true]);
+        $scope = $DB->get_fieldset_select('local_oauth_scopes', 'scope', 'is_default = :is_default', ['is_default' => true]);
 
         if ($scope) {
             return implode(' ', $scope);
@@ -480,7 +481,7 @@ class storage_moodle implements
      */
     public function getClientKey($client_id, $subject) {
         global $DB;
-        return $DB->get_field('oauth_jwt', 'public_key' , ['client_id' => $client_id, 'subject' => $subject]);
+        return $DB->get_field('local_oauth_jwt', 'public_key' , ['client_id' => $client_id, 'subject' => $subject]);
     }
 
     /* \OAuth2\Storage\ClientInterface::getClientScope
@@ -546,7 +547,7 @@ class storage_moodle implements
     public function getPublicKey($client_id = null) {
         global $DB;
         return $DB->get_field_select(
-            'oauth_public_keys',
+            'loca_oauth_public_keys',
             'public_key' ,
             'client_id=:client_id OR client_id IS NULL',
             ['client_id' => $client_id],
@@ -564,7 +565,7 @@ class storage_moodle implements
     public function getPrivateKey($client_id = null) {
         global $DB;
         return $DB->get_field_select(
-            'oauth_public_keys',
+            'local_oauth_public_keys',
             'private_key',
             'client_id=:client_id OR client_id IS NULL',
             ['client_id' => $client_id],

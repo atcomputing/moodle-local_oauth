@@ -56,7 +56,7 @@ if ($action == 'del') {
     $client->delete();
     echo $OUTPUT->notification(get_string('delok', 'local_oauth'), 'notifysuccess');
 }
-$clients = $DB->get_records('oauth_clients');
+$clients = $DB->get_records('local_oauth_clients');
 
 if (!empty($clients)) {
     $table = new html_table();

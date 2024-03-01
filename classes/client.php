@@ -43,18 +43,11 @@ class client {
         $this->clientsecret = self::generate_secret();
     }
 
-    public function id() {
-        if (isset($this->id)) {
-            return $this->id;
-        }
-        return null;
-    }
-
     // TODO Use $storage->getClientDetails instead .
     public static function get_client_by_id($id) {
         global $DB;
 
-        $row = $DB->get_record('oauth_clients', ['id' => $id]);
+        $row = $DB->get_record('local_oauth_clients', ['id' => $id]);
         if (!$row) {
             return null;
         }
@@ -85,9 +78,9 @@ class client {
             'no_confirmation' => $this->noconfirmation,
         ];
         if (isset($this->id)) {
-            $DB->update_record('oauth_clients', $row);
+            $DB->update_record('local_oauth_clients', $row);
         } else {
-            $DB->insert_record('oauth_clients', $row);
+            $DB->insert_record('local_oauth_clients', $row);
             $this->generate_key_pair($this->clientid);
         }
     }
@@ -95,8 +88,8 @@ class client {
     public function delete() {
 
         global $DB;
-        $DB->delete_records('oauth_clients', ['id' => $this->id]);
-        $DB->delete_records('oauth_public_keys', ['client_id' => $this->clientid]);
+        $DB->delete_records('local_oauth_clients', ['id' => $this->id]);
+        $DB->delete_records('local_oauth_public_keys', ['client_id' => $this->clientid]);
     }
 
     public static function generate_key_pair($clientid) {
@@ -121,7 +114,7 @@ class client {
         $record->public_key = $pubkey;
         $record->private_key  = $privkey;
 
-        $DB->insert_record('oauth_public_keys', $record);
+        $DB->insert_record('local_oauth_public_keys', $record);
     }
 
     public static function generate_secret() {

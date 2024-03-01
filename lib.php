@@ -30,7 +30,7 @@ function get_authorization_from_form($url, $clientid, $scope = false) {
         return true;
     }
 
-    $client = $DB->get_record('oauth_clients', ['client_id' => $clientid]);
+    $client = $DB->get_record('local_oauth_clients', ['client_id' => $clientid]);
 
     if ($client && $client->no_confirmation) {
         authorize_user_scope($USER->id, $clientid, $scope);
@@ -56,7 +56,7 @@ function is_scope_authorized_by_user($userid, $clientid, $scope = false) {
     if (!$scope) {
         $scope = 'login';
     }
-    return $DB->record_exists('oauth_user_auth_scopes', ['client_id' => $clientid, 'scope' => $scope, 'user_id' => $userid]);
+    return $DB->record_exists('local_oauth_user_auth_scopes', ['client_id' => $clientid, 'scope' => $scope, 'user_id' => $userid]);
 }
 
 function authorize_user_scope($userid, $clientid, $scope = false) {
@@ -69,5 +69,5 @@ function authorize_user_scope($userid, $clientid, $scope = false) {
     $record->user_id = $userid;
     $record->scope = $scope;
 
-    $DB->insert_record('oauth_user_auth_scopes', $record);
+    $DB->insert_record('local_oauth_user_auth_scopes', $record);
 }
