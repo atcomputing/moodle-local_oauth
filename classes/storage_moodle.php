@@ -547,7 +547,7 @@ class storage_moodle implements
     public function getPublicKey($client_id = null) {
         global $DB;
         return $DB->get_field_select(
-            'loca_oauth_public_keys',
+            'local_oauth_public_keys',
             'public_key' ,
             'client_id=:client_id OR client_id IS NULL',
             ['client_id' => $client_id],
@@ -584,7 +584,7 @@ class storage_moodle implements
     public function getEncryptionAlgorithm($client_id = null) {
         global $DB;
         $alg = $DB->get_field_select(
-            'oauth_public_keys',
+            'local_oauth_public_keys',
             'encryption_algorithm' ,
             'client_id=:client_id OR client_id IS NULL',
             ['client_id' => $client_id],
