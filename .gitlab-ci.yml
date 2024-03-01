@@ -62,6 +62,7 @@ test:
       variables:
         MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
   script:
+    - composer install
     - apt update
     - apt -yqq install --no-install-suggests default-jre-headless mariadb-client
     - moodle-plugin-ci install --moodle=/opt/moodle  --db-name moodle --db-host db
