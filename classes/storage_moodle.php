@@ -245,7 +245,7 @@ class storage_moodle implements
         $code_challenge = null,
         $code_challenge_method = null) {
 
-        // TODO implement Proof Key for Code Exchange (code_challenge), by storing in in db?
+        // TODO Implement Proof Key for Code Exchange (code_challenge), by storing in in db?
         global $DB;
         if (func_num_args() > 6) {
             // We are calling with an id token.
@@ -437,7 +437,7 @@ class storage_moodle implements
      */
     public function getUser($username) {
         global $DB;
-        //TODO dont user use DB direcly for accesing user
+        // TODO Don't user use DB direcly for accesing user.
         $userinfo = $DB->get_record('user', ['username' => $username]);
         if (!$userinfo) {
             return false;
