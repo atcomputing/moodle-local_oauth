@@ -1,6 +1,6 @@
 ---
 stages:
-  - prepare
+  # - prepare
   - test
   - publish
 
@@ -19,19 +19,6 @@ variables:
   DB: 'mariadb'
 
 default:
-  services:
-  #   - name: selenium/standalone-chrome:3
-  #     alias: behat
-    - name: mariadb:10.6
-      alias: db
-      command:
-        - '--character-set-server=utf8mb4'
-        - '--collation-server=utf8mb4_unicode_ci'
-        - '--innodb_file_per_table=On'
-        - '--wait-timeout=28800'
-        - '--skip-log-bin'
-      variables:
-        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
   cache:
     paths:
       - .cache
@@ -43,25 +30,41 @@ default:
     - mkdir -p /usr/share/man/man1 /usr/share/man/man3 /usr/share/man/man7
     # - apt-get -qq update
     # - apt-get -yqq install --no-install-suggests default-jre-headless mariadb-client
+    - 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
     - 'curl -sS https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash'
     - source ~/.bashrc
     - nvm install --default --latest-npm lts/gallium
-    - 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
-    - composer create-project -n --no-dev --no-progress --no-ansi  --prefer-dist moodlehq/moodle-plugin-ci /opt/mci ^4
-    - export PATH="/opt/mci/bin:/opt/mci/vendor/bin:$PATH"
+    - composer create-project -n --no-dev --no-progress --no-ansi  --prefer-dist moodlehq/moodle-plugin-ci /opt/moodle-plugin-ci ^4
+    - export PATH="/opt/moodle-plugin-ci/bin:/opt/moodle-plugin-ci/vendor/bin:$PATH"
     # TODO not always needed
     # install moodle
     # - moodle-plugin-ci install --db-host db 
     # - '{ php -S 0.0.0.0:8000 -t "$CI_PROJECT_DIR/moodle" >/dev/null 2>&1 & }'
 
-install dependencies:
-  stage: prepare
-  script:
-    composer install
+# install dependencies:
+#   stage: prepare
+#   script:
+#     composer install
 
 test:
   stage: test
+  services:
+    # - name: selenium/standalone-chrome:3
+    #   alias: behat
+    - name: mariadb:10.6
+      alias: db
+      command:
+        - '--character-set-server=utf8mb4'
+        - '--collation-server=utf8mb4_unicode_ci'
+        - '--innodb_file_per_table=On'
+        - '--wait-timeout=28800'
+        - '--skip-log-bin'
+      variables:
+        MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
   script:
+    - apt update
+    - apt -yqq install --no-install-suggests default-jre-headless mariadb-client
+    - moodle-plugin-ci install --moodle=/opt/moodle  --db-name moodle --db-host db
     - moodle-plugin-ci phplint $CI_PROJECT_DIR
     - moodle-plugin-ci phpunit $CI_PROJECT_DIR
     - moodle-plugin-ci behat --auto-rerun 0 --profile chrome $CI_PROJECT_DIR
@@ -90,7 +93,6 @@ moodle-lint:
   image: moodlehq/moodle-php-apache:8.1
   script:
     - composer install
-    - moodle-plugin-ci install
     - moodle-plugin-ci phpcs $CI_PROJECT_DIR --ansi
 
 
