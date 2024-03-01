@@ -43,6 +43,13 @@ class client {
         $this->clientsecret = self::generate_secret();
     }
 
+    public function id() {
+        if (isset($this->id)) {
+            return $this->id;
+        }
+        return null;
+    }
+
     // TODO Use $storage->getClientDetails instead .
     public static function get_client_by_id($id) {
         global $DB;
