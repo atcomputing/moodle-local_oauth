@@ -35,6 +35,8 @@ default:
   cache:
     paths:
       - .cache
+      - vendor/
+
   image: moodlehq/moodle-php-apache:8.1
   before_script:
     # move to container
@@ -72,6 +74,7 @@ validate:
   # variables:
   #   MOODLE_BRANCH: 'MOODLE_310_STABLE'
   script:
+    - composer install
     # - validate-version # TODO complains about CHANGELOG.md, even if it exist double check
     # - moodle-plugin-ci validate $CI_PROJECT_DIR # need moodle installed
     - moodle-plugin-ci savepoints $CI_PROJECT_DIR
@@ -88,6 +91,7 @@ moodle-lint:
   # variables:
   #   MOODLE_BRANCH: 'master'
   script:
+    - composer install
     - moodle-plugin-ci phpcs $CI_PROJECT_DIR --ansi
 
 
