@@ -97,7 +97,7 @@ moodle-lint:
 
 package plugin:
   stage: publish
-  image: ubuntu:latest
+  image: moodlehq/moodle-php-apache:8.1
   before_script:
     - apt update
     - apt install zip -y
