@@ -34,7 +34,7 @@
         <KEY NAME="access_token" TYPE="unique" FIELDS="access_token"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="local_oauth_authorization_codes" COMMENT="Store the auth code before access token">
+    <TABLE NAME="local_oauth_auth_codes" COMMENT="Store the auth code before access token">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="authorization_code" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>

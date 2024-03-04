@@ -216,7 +216,7 @@ class storage_moodle implements
      */
     public function getAuthorizationCode($code) {
         global $DB;
-        $code = $DB->get_record('local_oauth_authorization_codes', ['authorization_code' => $code]);
+        $code = $DB->get_record('local_oauth_auth_codes', ['authorization_code' => $code]);
         if (!$code) {
             return false;
         }
@@ -253,13 +253,13 @@ class storage_moodle implements
         }
 
         // If it exists, update it.
-        if ($auth_code = $DB->get_record('local_oauth_authorization_codes', ['authorization_code' => $code])) {
+        if ($auth_code = $DB->get_record('local_oauth_auth_codes', ['authorization_code' => $code])) {
             $auth_code->client_id = $client_id;
             $auth_code->user_id = $user_id;
             $auth_code->redirect_uri = $redirect_uri;
             $auth_code->expires = $expires;
             $auth_code->scope = $scope;
-            $DB->update_record('local_oauth_authorization_codes', $auth_code);
+            $DB->update_record('local_oauth_auth_codes', $auth_code);
         } else {
             $auth_code = new \StdClass();
             $auth_code->client_id = $client_id;
@@ -268,7 +268,7 @@ class storage_moodle implements
             $auth_code->expires = $expires;
             $auth_code->scope = $scope;
             $auth_code->authorization_code = $code;
-            $DB->insert_record('local_oauth_authorization_codes', $auth_code);
+            $DB->insert_record('local_oauth_auth_codes', $auth_code);
         }
         return true;
     }
@@ -294,14 +294,14 @@ class storage_moodle implements
         global $DB;
 
         // If it exists, update it.
-        if ($auth_code = $DB->get_record('local_oauth_authorization_codes', ['authorization_code' => $code])) {
+        if ($auth_code = $DB->get_record('local_oauth_auth_codes', ['authorization_code' => $code])) {
             $auth_code->client_id = $client_id;
             $auth_code->user_id = $user_id;
             $auth_code->redirect_uri = $redirect_uri;
             $auth_code->expires = $expires;
             $auth_code->scope = $scope;
             $auth_code->id_token = $id_token;
-            $DB->update_record('local_oauth_authorization_codes', $auth_code);
+            $DB->update_record('local_oauth_auth_codes', $auth_code);
         } else {
             $auth_code = new \StdClass();
             $auth_code->client_id = $client_id;
@@ -311,7 +311,7 @@ class storage_moodle implements
             $auth_code->scope = $scope;
             $auth_code->id_token = $id_token;
             $auth_code->authorization_code = $code;
-            $DB->insert_record('local_oauth_authorization_codes', $auth_code);
+            $DB->insert_record('local_oauth_auth_codes', $auth_code);
         }
         return true;
     }
@@ -322,7 +322,7 @@ class storage_moodle implements
      */
     public function expireAuthorizationCode($code) {
         global $DB;
-        return $DB->delete_records('local_oauth_authorization_codes', ['authorization_code' => $code]);
+        return $DB->delete_records('local_oauth_auth_codes', ['authorization_code' => $code]);
     }
 
     /**
@@ -661,7 +661,7 @@ class storage_moodle implements
     //       PRIMARY KEY (access_token)
     //     );
     //
-    //     CREATE TABLE mdl_oauth_authorization_codes (
+    //     CREATE TABLE mdl_oauth_auth_codes (
     //       authorization_code  VARCHAR(40)    NOT NULL,
     //       client_id           VARCHAR(80)    NOT NULL,
     //       user_id             VARCHAR(80),
