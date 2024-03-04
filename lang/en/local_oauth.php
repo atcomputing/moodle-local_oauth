@@ -60,3 +60,10 @@ $string['client_id_help'] = 'Identifier to be used from the client form in order
 $string['redirect_uri_help'] = 'URI where to redirect after login.';
 $string['grant_types_help'] = 'Choose how the user is allowed to login';
 $string['no_confirmation_help'] = 'The user will not be prompted to confirm authorized scopes, after the authentication was successfull';
+
+$string['scope_openid'] = "openid";
+$string['scope_profile'] = "profile";
+$string['scope_email'] = "email";
+$string['scope_address'] = "address";
+$string['scope_phone'] = "phne";
+$string['scope_enrolments'] = "enrolments";
