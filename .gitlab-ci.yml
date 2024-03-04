@@ -28,8 +28,6 @@ default:
   before_script:
     # move to container
     - mkdir -p /usr/share/man/man1 /usr/share/man/man3 /usr/share/man/man7
-    # - apt-get -qq update
-    # - apt-get -yqq install --no-install-suggests default-jre-headless mariadb-client
     - 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
     - 'curl -sS https://raw.githubusercontent.com/creationix/nvm/v0.39.3/install.sh | bash'
     - source ~/.bashrc
@@ -105,6 +103,7 @@ package plugin:
     - apt install zip -y
   script:
     - rm -rf vendor/ .cache
+    - 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
     - composer install --no-dev
     - 'version=$(sed -n ''s/\s*$plugin->version\s*=\s\([0-9]*\);.*/\1/p'' version.php)'
     - 'echo "version: ${version}"'
