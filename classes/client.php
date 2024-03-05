@@ -85,6 +85,7 @@ class client {
             'no_confirmation' => $this->noconfirmation,
         ];
         if (isset($this->id)) {
+            $row['id'] = $this->id;
             $DB->update_record('local_oauth_clients', $row);
         } else {
             $DB->insert_record('local_oauth_clients', $row);
