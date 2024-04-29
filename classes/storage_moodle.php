@@ -360,6 +360,12 @@ class storage_moodle implements
         if (!$user = \core_user::get_user($user_id)) {
             return false;
         }
+        // bit of ugly hack but some function need a security context
+        // but we cant use require login
+        // becuase in oure workflow do not realy login with normal moode session
+        // and normaly you would set context on the page that user tries to acces
+        // but then we dont know user id yet
+        $PAGE->set_context(\context_user::instance($user_id));
         $claims = explode(' ', trim($claims));
         $userclaims = [];
 
