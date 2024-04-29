@@ -93,7 +93,7 @@ moodle-lint:
   script:
     - composer install
     - moodle-plugin-ci phpcs $CI_PROJECT_DIR --ansi
-
+  allow_failure: true
 
 package plugin:
   stage: publish

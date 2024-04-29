@@ -357,6 +357,7 @@ class storage_moodle implements
      * @return array|bool
      */
     public function getUserClaims($user_id, $claims) {
+        global $PAGE;
         if (!$user = \core_user::get_user($user_id)) {
             return false;
         }
