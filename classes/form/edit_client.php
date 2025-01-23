@@ -63,10 +63,8 @@ class edit_client extends moodleform {
         $grantoptions = $server->getGrantTypes();
         foreach ($grantoptions as $key => $value) {
             $grantoptions[$key] = $key . ": " . get_string($key."_explanation", "local_oauth");
-
-            // $bform->addElement('checkbox', $key, $key . ": " . get_string($key."_explanation", "local_oauth"));
-            // $bform->addElement('advcheckbox', 'granttypes[]',  $key . ": " . get_string($key."_explanation", "local_oauth"),[], array("", $key));
         }
+        // TODO Consider replacing this with checkbox for granttypes.
         $select = $bform->addElement('select', 'granttypes', get_string('grant_types', 'local_oauth'), $grantoptions);
         $bform->addHelpButton('granttypes', 'grant_types', 'local_oauth');
         $select->setMultiple(true);
@@ -81,7 +79,7 @@ class edit_client extends moodleform {
         $select->setMultiple(true);
 
         // TODO This shouldn't hide userid if client_credentials + other is selected.
-        // $bform->hideIf('userid', 'granttypes', 'in', ['client_credentials']);
+        // This does not work $bform->hideIf('userid', 'granttypes', 'in', ['client_credentials']);.
 
         $options = [
             'ajax' => 'core_search/form-search-user-selector',

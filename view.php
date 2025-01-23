@@ -20,7 +20,7 @@
  * @package     local_oauth
  * @copyright   2024 Rens Sikma r.sikma@atcomputing.nl
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+ **/
 
 require_once('../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
