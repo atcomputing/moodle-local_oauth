@@ -17,7 +17,7 @@
 /**
  * Plugin index file
  *
- * @package     local_greetings
+ * @package     local_oauth
  * @copyright
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

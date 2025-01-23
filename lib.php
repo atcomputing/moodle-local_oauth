@@ -22,6 +22,13 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
+// TODO can we decouple confirmation page/form from logic.
+/**
+ * If user is authorized with request scopes.
+ * If request for first time, and confirmation is required. render confirmation pagekkk
+ * @return Boolean if user is autrhoized by with these scopes
+ */
 function get_authorization_from_form($url, $clientid, $scope = false) {
     global $CFG, $OUTPUT, $USER, $DB;
     require_once("{$CFG->libdir}/formslib.php");
@@ -50,7 +57,9 @@ function get_authorization_from_form($url, $clientid, $scope = false) {
     echo $OUTPUT->footer();
     die();
 }
-
+/**
+ * Test if user_id is already authorized for this scope.
+ **/
 function is_scope_authorized_by_user($userid, $clientid, $scope = false) {
     global $DB;
     if (!$scope) {
@@ -59,6 +68,9 @@ function is_scope_authorized_by_user($userid, $clientid, $scope = false) {
     return $DB->record_exists('local_oauth_user_auth_scopes', ['client_id' => $clientid, 'scope' => $scope, 'user_id' => $userid]);
 }
 
+/**
+ * Store used has/is authorize with these scopes.
+ **/
 function authorize_user_scope($userid, $clientid, $scope = false) {
     global $DB;
     if (!$scope) {

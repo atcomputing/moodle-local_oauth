@@ -28,12 +28,16 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
 
-class user_info_test extends \advanced_testcase {
+/**
+ * test user infor response
+ */
+final class user_info_test extends \advanced_testcase {
 
     /**
+     * test userinfor response after authentication with all scopes
      * @covers \local\oauth::
      */
-    public function test_userinfo() {
+    public function test_userinfo(): void {
 
         $this->resetAfterTest(true);
 

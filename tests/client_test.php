@@ -30,12 +30,16 @@ global $CFG;
 
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
 
-class client_test extends \advanced_testcase {
+/**
+ * test client class
+ */
+final class client_test extends \advanced_testcase {
 
     /**
+     * test creating 2 clients
      * @covers \local\oauth\client::__construct
      */
-    public function test_constructor() {
+    public function test_constructor(): void {
         global $DB;
         $storage = new \local_oauth\storage_moodle([]);
 

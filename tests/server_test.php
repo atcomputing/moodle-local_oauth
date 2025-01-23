@@ -28,12 +28,16 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
-class server_test extends \advanced_testcase {
+/**
+ * test server class
+ */
+final class server_test extends \advanced_testcase {
 
     /**
+     * Test full authorization_code grant_type flow
      * @covers \local\oauth\server::
      */
-    public function test_authorization_code_openid() {
+    public function test_authorization_code_openid(): void {
         $this->resetAfterTest(true);
 
         $server = new server();
@@ -88,9 +92,10 @@ class server_test extends \advanced_testcase {
     }
 
     /**
+     * Test client_credentials grant_type flow
      * @covers \local\oauth\server::
      */
-    public function test_client_credentials_openid() {
+    public function test_client_credentials_openid(): void {
 
         $this->resetAfterTest(true);
 
@@ -127,9 +132,10 @@ class server_test extends \advanced_testcase {
     // TODO add test_refresh_token.
 
     /**
+     * Test server supported grant types
      * @covers \local\oauth\server::
      */
-    public function test_granttypes() {
+    public function test_granttypes(): void {
 
         $server = new server();
         $grants = $server->getGrantTypes();

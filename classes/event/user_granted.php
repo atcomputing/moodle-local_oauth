@@ -24,6 +24,9 @@
 
 namespace local_oauth\event;
 
+/*
+ * Event that is triggered when user authenticated succesfull with this oauth plugin
+ */
 class user_granted extends \core\event\base {
 
     /**

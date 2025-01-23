@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local
+ * oauth2/openidconnect login page
+ *
+ * @package    local_oauth
  * @subpackage oauth
  * @copyright  2014 onwards Pau Ferrer Ocaña
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
