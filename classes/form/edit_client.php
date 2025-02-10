@@ -30,8 +30,14 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/formslib.php");
 
+/**
+ * Form for client options
+ */
 class edit_client extends moodleform {
 
+    /**
+     * Define the fields of the form
+     */
     public function definition() {
         $server = new \local_oauth\server();
         $bform =& $this->_form;
@@ -95,6 +101,9 @@ class edit_client extends moodleform {
 
     }
 
+    /**
+     * Validate form data.
+     */
     public function validation($data, $files) {
         global $DB;
         $errors = parent::validation($data, $files);

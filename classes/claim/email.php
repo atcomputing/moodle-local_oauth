@@ -23,8 +23,17 @@
  */
 namespace local_oauth\claim;
 
+/**
+ * class that implements oidc email claims
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+ */
 class email implements claim {
 
+    /**
+     * Get email claim.
+     * @param array of core_user user user want the email claim from
+     * @return array() Returns email information of user
+     */
     public function claim($user) {
         $claims = [
             'email' => $user->email,

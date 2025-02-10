@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * implementation for storing opeID in the moodle database
+ *
  * @package    local_oauth
  * @subpackage oauth
  * @copyright
@@ -26,6 +28,10 @@ namespace local_oauth;
 use OAuth2\OpenID\Storage\UserClaimsInterface;
 use OAuth2\OpenID\Storage\AuthorizationCodeInterface as OpenIDAuthorizationCodeInterface;
 
+/**
+ * Class that implements how the oauth/openid connection information is stored and acces the mooodle database.
+ * As specified in Oauth2 library
+ */
 class storage_moodle implements
     \OAuth2\Storage\AuthorizationCodeInterface,
     \OAuth2\Storage\AccessTokenInterface,
@@ -37,11 +43,18 @@ class storage_moodle implements
     \OAuth2\Storage\PublicKeyInterface,
     \OAuth2\OpenID\Storage\UserClaimsInterface,
     OpenIDAuthorizationCodeInterface {
+
     // TODO have only 1 public private key pair for all clients?
+
+    /** @var config null, represent config. Not used now*/
     protected $config;
 
+    /** @var array $claimfunctions list of claims supported*/
     public array $claimfunctions;
 
+    /**
+     * Constructor
+     */
     public function __construct($connection, $config = []) {
         $this->config = $config;
         $this->claimfunctions = [
@@ -52,13 +65,16 @@ class storage_moodle implements
             'enrolments' => new \local_oauth\claim\enrolments,
         ];
     }
-    /* \OAuth2\Storage\ClientCredentialsInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
+
     /**
+     * Check client_secret for client with id
+     *
      * @param string $client_id
      * @param null|string $client_secret
      * @return bool
+     *
+     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
+     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
      */
     public function checkClientCredentials($client_id, $client_secret = null) {
         global $DB;
@@ -66,10 +82,9 @@ class storage_moodle implements
         return $client_secret == $client_secret_db;
     }
 
-    /* \OAuth2\Storage\ClientCredentialsInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
+     * if its a public client, which does not requires a client_secret.
+     *
      * @param string $client_id
      * @return bool
      */
@@ -82,10 +97,9 @@ class storage_moodle implements
         return empty($client->client_secret);
     }
 
-    /* \OAuth2\Storage\ClientInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
+     * Get client information from database.
+     *
      * @param string $client_id
      * @return array|mixed
      */
@@ -100,6 +114,8 @@ class storage_moodle implements
     }
 
     /**
+     * Store client option in databse
+     *
      * @param string $client_id
      * @param null|string $client_secret
      * @param null|string $redirect_uri
@@ -138,6 +154,8 @@ class storage_moodle implements
     }
 
     /**
+     * Getter for  which grant types are supported by the client.
+     *
      * @param $client_id
      * @param $grant_type
      * @return bool
@@ -155,6 +173,8 @@ class storage_moodle implements
     }
 
     /**
+     * Get information about access_token from database.
+     *
      * @param string $access_token
      * @return array|bool|mixed|null
      */
@@ -169,6 +189,8 @@ class storage_moodle implements
     }
 
     /**
+     * Set access token in database.
+     *
      * @param string $access_token
      * @param mixed  $client_id
      * @param mixed  $user_id
@@ -200,17 +222,20 @@ class storage_moodle implements
 
 
     /**
+     * Delete access_token from database
+     *
      * @param $access_token
      * @return bool
      */
     public function unsetAccessToken($access_token) {
         global $DB;
         $DB->delete_records('local_oauth_access_tokens', ['access_token' => $access_token]);
-
     }
 
     /* OAuth2\Storage\AuthorizationCodeInterface */
     /**
+     * Get infor from databse of a authorization_code
+     *
      * @param string $code
      * @return mixed
      */
@@ -225,6 +250,8 @@ class storage_moodle implements
     }
 
     /**
+     * Set authorization_code in database.
+     *
      * @param string $code
      * @param mixed  $client_id
      * @param mixed  $user_id
@@ -274,6 +301,8 @@ class storage_moodle implements
     }
 
     /**
+     * set authorization id token in database
+     *
      * @param string $code
      * @param mixed  $client_id
      * @param mixed  $user_id
@@ -317,6 +346,8 @@ class storage_moodle implements
     }
 
     /**
+     * Delete authorization_code
+     *
      * @param string $code
      * @return bool
      */
@@ -326,6 +357,8 @@ class storage_moodle implements
     }
 
     /**
+     * Check credentials of a user
+     *
      * @param string $username
      * @param string $password
      * @return bool
@@ -338,20 +371,29 @@ class storage_moodle implements
         return false;
     }
 
-    /* \OAuth2\Storage\UserCredentialsInterface
     /**
+     * Get use info from database
+     *
      * @param string $username
      * @return array|bool
+     *
+     * \OAuth2\Storage\UserCredentialsInterface
      */
     public function getUserDetails($username) {
         return $this->getUser($username);
     }
 
+
+    /**
+     * getter for supported claims
+     */
     public function valid_claims() {
         return array_keys($this->claimfunctions);
     }
 
     /**
+     * Get list claims for a user
+     *
      * @param mixed  $user_id
      * @param string $claims
      * @return array|bool
@@ -361,11 +403,11 @@ class storage_moodle implements
         if (!$user = \core_user::get_user($user_id)) {
             return false;
         }
-        // bit of ugly hack but some function need a security context
-        // but we cant use require login
-        // becuase in oure workflow do not realy login with normal moode session
-        // and normaly you would set context on the page that user tries to acces
-        // but then we dont know user id yet
+        // Bit of ugly hack but some function need a security context.
+        // But we cant use require login.
+        // Becuase in oure workflow do not realy login with normal moode session.
+        // And normaly you would set context on the page that user tries to access.
+        // But then we dont know user id yet.
         $PAGE->set_context(\context_user::instance($user_id));
         $claims = explode(' ', trim($claims));
         $userclaims = [];
@@ -384,6 +426,8 @@ class storage_moodle implements
     }
 
     /**
+     * Get info about refresh_token from database.
+     *
      * @param string $refresh_token
      * @return bool|mixed
      */
@@ -398,6 +442,8 @@ class storage_moodle implements
     }
 
     /**
+     * Set refresh_token in database
+     *
      * @param string $refresh_token
      * @param mixed  $client_id
      * @param mixed  $user_id
@@ -420,6 +466,8 @@ class storage_moodle implements
     }
 
     /**
+     * Delete refresh_token from database
+     *
      * @param string $refresh_token
      * @return bool
      */
@@ -429,6 +477,8 @@ class storage_moodle implements
     }
 
     /**
+     * Check moodle password is valid for user.
+     *
      * @param array $user
      * @param string $password
      * @return bool
@@ -439,6 +489,7 @@ class storage_moodle implements
     }
 
     /**
+     * Get userinfo from name
      * @param string $username
      * @return array|bool
      */
@@ -455,17 +506,21 @@ class storage_moodle implements
         return $userinfo;
     }
 
-    /* \OAuth2\Storage\ScopeInterface
     /**
+     * Is there are claim matching the scope.
+     *
      * @param string $scope
      * @return bool
+     *
+     * \OAuth2\Storage\ScopeInterface
      */
     public function scopeExists($scope) {
         return isset($claimfunctions[$scope]);
     }
 
-    /* \OAuth2\Storage\ScopeInterface
     /**
+     * Get default scopes fro this client
+     *
      * @param mixed $client_id
      * @return null|string
      */
@@ -480,8 +535,9 @@ class storage_moodle implements
         return null;
     }
 
-    /* \OAuth2\Storage\JwtBearerInterface
     /**
+     * Getter for public privit keys used by client
+     *
      * @param mixed $client_id
      * @param $subject
      * @return string
@@ -491,10 +547,9 @@ class storage_moodle implements
         return $DB->get_field('local_oauth_jwt', 'public_key' , ['client_id' => $client_id, 'subject' => $subject]);
     }
 
-    /* \OAuth2\Storage\ClientInterface::getClientScope
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
+     * Getter for getting scopes a client is allowed to request.
+     *
      * @param mixed $client_id
      * @return bool|null
      */
@@ -510,10 +565,9 @@ class storage_moodle implements
         return null;
     }
 
-    /* \OAuth2\Storage\JwtBearerInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
+     * Not implemented.
+     *
      * @param mixed $client_id
      * @param $subject
      * @param $audience
@@ -526,9 +580,6 @@ class storage_moodle implements
         throw new \Exception('getJti() for the Moodle driver is currently unimplemented.');
     }
 
-    /* \OAuth2\Storage\JwtBearerInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
      * (@inheritdoc)
      * @param mixed $client_id
@@ -543,9 +594,6 @@ class storage_moodle implements
         throw new \Exception('setJti() for the Moodle driver is currently unimplemented.');
     }
 
-    /* \OAuth2\Storage\PublicKeyInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
      * (@inheritdoc)
      * @param mixed $client_id
@@ -561,9 +609,6 @@ class storage_moodle implements
             'client_id IS NOT NULL DESC');
     }
 
-    /* \OAuth2\Storage\PublicKeyInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
      * (@inheritdoc)
      * @param mixed $client_id
@@ -580,9 +625,6 @@ class storage_moodle implements
         );
     }
 
-    /* \OAuth2\Storage\PublicKeyInterface
-     * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
-     * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameUnderscore
     /**
      * (@inheritdoc)
      * @param mixed $client_id

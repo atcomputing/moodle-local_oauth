@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin index file
+ * Server class
  *
  * @package     local_oauth
  * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
@@ -24,12 +24,17 @@
 
 namespace local_oauth;
 
+/**
+ * Server class reprenset the server settings used for this OIDC server
+ */
 class server  extends \OAuth2\Server {
 
     // TODO Modify AuthorizeController so it add all claims in id_token.
     // TODO Make singelton.
     // TODO Do we want to support implicit flow.
-
+    /**
+     * Create server object
+     */
     public function __construct() {
         global $CFG;
 
@@ -68,12 +73,19 @@ class server  extends \OAuth2\Server {
         parent::__construct($storage, $config, $granttypes);
     }
 
+    /**
+     * Getter for scopes this serer supports.
+     */
     public function supported_scopes() {
         $claims = $this->getStorage('user_claims')->valid_claims();
         $reserved = ['openid']; // TODO should offline_access be included.
         return array_merge($reserved, $claims);
     }
 
+    /**
+     * Generete well-known openid configuration json for this server
+     * Not used yet
+     */
     public function write_well_known_openid_configuration() {
         global $CFG;
 

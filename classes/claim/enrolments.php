@@ -23,8 +23,17 @@
  */
 namespace local_oauth\claim;
 
+/**
+ * class that implements moodle specific claim: enrolment.
+ */
 class enrolments implements claim {
-
+    // TODO maybe add extra claim group.
+    // TODO maybe also return role, and external id.
+    /**
+     * Get addres claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns address information of user enrolments which array of course short names
+     */
     public function claim($user) {
         $enrolments = [];
         $courses = enrol_get_users_courses($user->id, true, 'shortname', null);

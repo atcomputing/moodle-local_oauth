@@ -23,8 +23,18 @@
  */
 namespace local_oauth\claim;
 
+
+/**
+ * class that implements oidc profile claim
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+ */
 class profile implements claim {
 
+    /**
+     * Get addres claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns profile information of user
+     */
     public function claim($user) {
         global $CFG, $PAGE;
         $userpicture = new \user_picture($user);

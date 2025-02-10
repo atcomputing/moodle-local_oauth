@@ -23,16 +23,31 @@
  */
 namespace local_oauth;
 
+/**
+ * class that manges settings for client for this IdP.
+ */
 class client {
+    /**@var int id primary for this client in the database */
     public int $id; // Has to be pulic now because the way its send to database in update.
+
+    /**@var string $clientid name of the client */
     public string $clientid;
+    /**@var string $clientsecret password of this client*/
     public string $clientsecret;
+    /**@var string $redirecturi addres of the clinet to send user to after identification*/
     public string $redirecturi;
+    /**@var array $granttypes types of oauth flows server will accept for this client*/
     public array $granttypes;
+    /**@var array $scopes the client is allowed to request, which in our case are the claims*/
     public array $scope;
+    /**@var int $userid if client grantype used is client_authenticat. which user the client inperonates */
     public int $userid;
+    /**@var int $noconfirmation if user is asked to confirm that client is allowed to get this information of the user*/
     public int $noconfirmation;
 
+    /**
+     * Initialze the client class.
+     */
     public function __construct($clientid, $redirecturi, $granttypes, $scope, $userid, $noconfirmation) {
         $this->clientid = $clientid;
         $this->redirecturi = $redirecturi;
@@ -43,6 +58,9 @@ class client {
         $this->clientsecret = self::generate_secret();
     }
 
+    /**
+     * Getter for id.
+     */
     public function id() {
         if (isset($this->id)) {
             return $this->id;
@@ -51,6 +69,9 @@ class client {
     }
 
     // TODO Use $storage->getClientDetails instead .
+    /**
+     * Get client by client id from database.
+     */
     public static function get_client_by_id($id) {
         global $DB;
 
@@ -72,6 +93,9 @@ class client {
         return $client;
     }
 
+    /**
+     * Create or Update row for this client in the database
+     */
     public function store() {
         // Can't use $storatge->setClientDetails because that is using no_confirmation?
         global $DB;
@@ -93,6 +117,10 @@ class client {
         }
     }
 
+    /**
+     * Delete client from database.
+     * This also deletes the client keys from the database
+     */
     public function delete() {
 
         global $DB;
@@ -100,6 +128,9 @@ class client {
         $DB->delete_records('local_oauth_public_keys', ['client_id' => $this->clientid]);
     }
 
+    /**
+     * Generate public private key pair
+     */
     public static function generate_key_pair($clientid) {
         global $DB;
         $config = [
@@ -125,6 +156,9 @@ class client {
         $DB->insert_record('local_oauth_public_keys', $record);
     }
 
+    /**
+     * Generate a random password.
+     */
     public static function generate_secret() {
         // Get a whole bunch of random characters from the OS.
         $fp = fopen('/dev/urandom', 'rb');

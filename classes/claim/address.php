@@ -23,9 +23,19 @@
  */
 namespace local_oauth\claim;
 
+/**
+ * class that implements oidc address claims
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim
+ */
 class address implements claim {
 
-    public function claim($user) {
+
+    /**
+     * Get addres claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns address information of user
+     */
+    public function claim($user): array {
         $claims = [
             'address' => [
                 // Not inplemented 'formatted', 'region' 'postal_code'.

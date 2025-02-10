@@ -23,6 +23,18 @@
  */
 namespace local_oauth\claim;
 
+/**
+ * interface to add claims.
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#Claims
+ */
 interface claim {
+
+    // TODO why array not the object.
+
+    /**
+     * Get addres claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns address information of user
+     */
     public function claim(array $user);
 }

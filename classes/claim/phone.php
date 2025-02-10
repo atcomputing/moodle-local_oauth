@@ -23,8 +23,17 @@
  */
 namespace local_oauth\claim;
 
+/**
+ * class that implements oidc phone claims
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+ */
 class phone implements claim {
 
+    /**
+     * Get phone claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns phone_number information of user
+     */
     public function claim($user) {
         $claims = [
             'phone_number' => isset($user->phone1) ? $user->phone1 : $user->phone2,

@@ -25,8 +25,15 @@ namespace local_oauth\form;
 
 use moodleform;
 
+/**
+ * Form that request the use if he the client should be authorize,
+ * to get information specified by the requested scope.
+ */
 class authorize extends moodleform {
 
+    /**
+     * Defined fields for the authorize form.
+     */
     public function definition() {
         $mform =& $this->_form;
 
