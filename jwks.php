@@ -18,15 +18,35 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright   2024 Rens Sikma <r.sikma@atcomputing.nl>
+ * @copyright   2024 Rens Sikma <r.sikam@atcomputing.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 // phpcs:disable moodle.Files.RequireLogin.Missing
-require_once('../../config.php');
+
+require('../../config.php');
 require_once('vendor/autoload.php');
 
-$server = new \local_oauth\server();
+use OAuth2\Encryption\Jwt;
 
-// Attributes still missing from old project 'id,auth,description'.
-// Handle a user_info request for an OAuth2.0 Access Token and send the response to the client.
-$server->handleUserInfoRequest(OAuth2\Request::createFromGlobals())->send();
+$storage = new \local_oauth\storage_moodle([]);
+
+$jsondata = ['keys' => []];
+$keys = $DB->get_records('local_oauth_public_keys', null, '', 'public_key');
+foreach ($keys as $key) {
+    $pubkey = openssl_pkey_get_public($key->public_key);
+    $keyinfo = openssl_pkey_get_details($pubkey);
+    $jwt = new \OAuth2\Encryption\Jwt();
+    $jsondata['keys'][] =
+        [
+            'kty' => 'RSA',
+            "use" => "sig",
+            // TODO add kid, x5c, 'alg' => 'RS256'.
+            'n' => $jwt->urlSafeB64Encode($keyinfo['rsa']['n']),
+            'e' => $jwt->urlSafeB64Encode($keyinfo['rsa']['e']),
+        ];
+}
+
+// Output JWKS JSON.
+header('Content-Type: application/json');
+echo json_encode($jsondata, JSON_PRETTY_PRINT);

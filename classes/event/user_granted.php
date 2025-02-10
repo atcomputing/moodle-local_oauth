@@ -23,8 +23,10 @@
  */
 
 namespace local_oauth\event;
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Event that is triggered when user authenticated succesfull with this oauth plugin
+ */
 class user_granted extends \core\event\base {
 
     /**

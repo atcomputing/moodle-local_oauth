@@ -18,11 +18,23 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die;
+namespace local_oauth\claim;
 
-$plugin->version  = 2022031102;   // The (date) version of this plugin.
-$plugin->requires = 2011021900;   // Requires this Moodle version.
-$plugin->component = 'local_oauth';
+/**
+ * interface to add claims.
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#Claims
+ */
+interface claim {
+
+    // TODO why array not the object.
+
+    /**
+     * Get addres claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns address information of user
+     */
+    public function claim(array $user);
+}

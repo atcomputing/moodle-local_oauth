@@ -18,18 +18,37 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace local_oauth;
+
 defined('MOODLE_INTERNAL') || die();
 
-$ADMIN->add(
-    'server',
-    new admin_externalpage(
-        'local_oauth_settings',
-        get_string('settings', 'local_oauth'),
-        $CFG->wwwroot . '/local/oauth/view.php',
-        ['local/oauth:manageclients']
-    )
-);
+global $CFG;
+
+require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
+
+
+// TODO include test from vendor/bshaffer/oauth2-server-php/test for storage.
+
+/**
+ * Test storage class for moodle oauth
+ */
+final class storage_moodle_test extends \advanced_testcase {
+
+    /**
+     * Test getUserDetails with aribtray generated user.
+     * @covers \local\oauth\storage_moodle::get_userDetails
+     */
+    public function test_user(): void {
+        $this->resetAfterTest(true);
+        $storage = new storage_moodle([]);
+        $user = $this->getDataGenerator()->create_user([]);
+
+        $details = $storage->getUserDetails($user->username);
+        $this->assertNotEmpty($details);
+        // TODO test for required attributes.
+    }
+}

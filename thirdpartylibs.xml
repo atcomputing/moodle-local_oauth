@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <libraries>
     <library>
-        <location>OAuth2</location>
+        <location>vendor/bshaffer/oauth2-server-php/</location>
         <name>oauth2-server-php</name>
-		<!-- TODO check if this real the version used. use submodule? -->
-        <version>1.14.1</version> 
+        <version>1.14.1</version>
         <license>MIT</license>
         <licenseversion>1</licenseversion>
+    </library>
+    <library>
+        <location>vendor</location>
+        <name>Composer auto loading and plugins</name>
+        <license>MIT</license>
     </library>
 </libraries>

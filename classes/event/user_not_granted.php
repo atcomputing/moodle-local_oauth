@@ -23,8 +23,10 @@
  */
 
 namespace local_oauth\event;
-defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Event that is triggered when user is NOT succesfull authenticated succesfull with this oauth plugin
+ */
 class user_not_granted extends user_granted {
 
     /**

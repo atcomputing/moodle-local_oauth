@@ -18,11 +18,27 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die;
+namespace local_oauth\claim;
 
-$plugin->version  = 2022031102;   // The (date) version of this plugin.
-$plugin->requires = 2011021900;   // Requires this Moodle version.
-$plugin->component = 'local_oauth';
+/**
+ * class that implements oidc phone claims
+ * @link https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+ */
+class phone implements claim {
+
+    /**
+     * Get phone claim.
+     * @param array of core_user user user want the address claim from
+     * @return array() Returns phone_number information of user
+     */
+    public function claim($user) {
+        $claims = [
+            'phone_number' => isset($user->phone1) ? $user->phone1 : $user->phone2,
+            // Not implemented  phone_number_verified.
+        ];
+        return $claims;
+    }
+}

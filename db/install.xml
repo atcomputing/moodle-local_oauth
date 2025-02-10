@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="oauth_clients" COMMENT="Client platforms that can authenticate">
+    <TABLE NAME="local_oauth_clients" COMMENT="Client platforms that can authenticate">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="client_id" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false"/>
@@ -13,7 +13,6 @@
         <FIELD NAME="grant_types" TYPE="char" LENGTH="80" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="scope" TYPE="char" LENGTH="1333" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
-        <FIELD NAME="use_email_aliases" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="0"/>
         <FIELD NAME="no_confirmation" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
@@ -21,7 +20,7 @@
         <KEY NAME="client_id" TYPE="unique" FIELDS="client_id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_access_tokens" COMMENT="Table to store the access tokens">
+    <TABLE NAME="local_oauth_access_tokens" COMMENT="Table to store the access tokens">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="access_token" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
@@ -35,7 +34,7 @@
         <KEY NAME="access_token" TYPE="unique" FIELDS="access_token"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_authorization_codes" COMMENT="Store the auth code before access token">
+    <TABLE NAME="local_oauth_auth_codes" COMMENT="Store the auth code before access token">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="authorization_code" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
@@ -51,7 +50,7 @@
         <KEY NAME="authorization_code" TYPE="unique" FIELDS="authorization_code"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_refresh_tokens" COMMENT="Store the refresh access tokens">
+    <TABLE NAME="local_oauth_refresh_tokens" COMMENT="Store the refresh access tokens">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="refresh_token" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
@@ -65,7 +64,7 @@
         <KEY NAME="refresh_token" TYPE="unique" FIELDS="refresh_token"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_scopes" COMMENT="Store the scopes">
+    <TABLE NAME="local_oauth_scopes" COMMENT="Store the scopes">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="scope" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false"/>
@@ -76,7 +75,7 @@
         <KEY NAME="scope" TYPE="unique" FIELDS="scope"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_jwt" COMMENT="Store the auth code before access token">
+    <TABLE NAME="local_oauth_jwt" COMMENT="Store the auth code before access token">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="client_id" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false"/>
@@ -87,7 +86,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_public_keys" COMMENT="Store the auth code before access token">
+    <TABLE NAME="local_oauth_public_keys" COMMENT="Store the auth code before access token">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="client_id" TYPE="char" LENGTH="80" NOTNULL="false" SEQUENCE="false"/>
@@ -99,7 +98,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="oauth_user_auth_scopes" COMMENT="Store the scopes authorized by the user">
+    <TABLE NAME="local_oauth_user_auth_scopes" COMMENT="Store the scopes authorized by the user">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true"/>
         <FIELD NAME="client_id" TYPE="char" LENGTH="80" NOTNULL="true" SEQUENCE="false"/>
