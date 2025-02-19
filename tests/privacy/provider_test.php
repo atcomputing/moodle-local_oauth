@@ -18,7 +18,8 @@
  * Privacy provider tests.
  *
  * @package    local_oauth
- * @copyright  2025 Rens Sikma <r.sikma@atcomputing.nl>
+ * @copyright   2025 AT Computing
+ * @author      Rens Sikma <r.sikma@atcomping.nl>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_oauth\privacy;

@@ -18,7 +18,8 @@
  * Plugin privicy provider
  *
  * @package     local_oauth
- * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
+ * @copyright   2024 AT Computing
+ * @author      Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_oauth\privacy;
