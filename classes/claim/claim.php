@@ -33,7 +33,7 @@ interface claim {
 
     /**
      * Get addres claim.
-     * @param array of core_user user user want the address claim from
+     * @param array $user core_user user user want the address claim from
      * @return array() Returns address information of user
      */
     public function claim(array $user);

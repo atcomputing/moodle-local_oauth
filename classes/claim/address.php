@@ -29,10 +29,9 @@ namespace local_oauth\claim;
  */
 class address implements claim {
 
-
     /**
      * Get addres claim.
-     * @param array of core_user user user want the address claim from
+     * @param array $user core_user user user want the address claim from
      * @return array() Returns address information of user
      */
     public function claim($user): array {
@@ -40,7 +39,7 @@ class address implements claim {
             'address' => [
                 // Not inplemented 'formatted', 'region' 'postal_code'.
                 'street_address' => $user->address,
-                'locality' => $user->address,
+                'locality' => $user->city,
                 'country' => $user->country,
             ],
         ];

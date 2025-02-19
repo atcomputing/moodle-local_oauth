@@ -18,7 +18,7 @@
  * local_oauth user granted event.
  *
  * @package    local_oauth
- * @copyright
+ * @copyright   https://github.com/examus/moodle-local_oauth
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_oauth\form;
@@ -26,8 +26,7 @@ namespace local_oauth\form;
 use moodleform;
 
 /**
- * Form that request the use if he the client should be authorize,
- * to get information specified by the requested scope.
+ * Form that request the use if he the client should be authorize, to get information specified by the requested scope.
  */
 class authorize extends moodleform {
 

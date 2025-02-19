@@ -32,7 +32,7 @@ class profile implements claim {
 
     /**
      * Get addres claim.
-     * @param array of core_user user user want the address claim from
+     * @param array $user core_user want the address claim from
      * @return array() Returns profile information of user
      */
     public function claim($user) {

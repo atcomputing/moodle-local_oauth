@@ -31,7 +31,7 @@ class enrolments implements claim {
     // TODO maybe also return role, and external id.
     /**
      * Get addres claim.
-     * @param array of core_user user user want the address claim from
+     * @param array $user core_user want the address claim from
      * @return array() Returns address information of user enrolments which array of course short names
      */
     public function claim($user) {

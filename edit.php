@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin index file
+ * Plugin edit file
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   https://github.com/examus/moodle-local_oauth
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  **/
 

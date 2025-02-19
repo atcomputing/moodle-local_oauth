@@ -19,7 +19,7 @@
  *
  * @package    local_oauth
  * @subpackage oauth
- * @copyright
+ * @copyright  https://github.com/examus/moodle-local_oauth
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,8 +29,9 @@ use OAuth2\OpenID\Storage\UserClaimsInterface;
 use OAuth2\OpenID\Storage\AuthorizationCodeInterface as OpenIDAuthorizationCodeInterface;
 
 /**
- * Class that implements how the oauth/openid connection information is stored and acces the mooodle database.
- * As specified in Oauth2 library
+ * Class that implements how the oauth/openid connection information is stored  moodle database
+ *
+ * This is done be implementing the interfaced from OAuth2
  */
 class storage_moodle implements
     \OAuth2\Storage\AuthorizationCodeInterface,
@@ -54,6 +55,9 @@ class storage_moodle implements
 
     /**
      * Constructor
+     *
+     * @param mixed $connection
+     * @param array $config
      */
     public function __construct($connection, $config = []) {
         $this->config = $config;
@@ -156,8 +160,8 @@ class storage_moodle implements
     /**
      * Getter for  which grant types are supported by the client.
      *
-     * @param $client_id
-     * @param $grant_type
+     * @param int $client_id
+     * @param string $grant_type
      * @return bool
      */
     public function checkRestrictedGrantType($client_id, $grant_type) {
@@ -224,7 +228,7 @@ class storage_moodle implements
     /**
      * Delete access_token from database
      *
-     * @param $access_token
+     * @param string $access_token
      * @return bool
      */
     public function unsetAccessToken($access_token) {
@@ -259,6 +263,8 @@ class storage_moodle implements
      * @param int    $expires
      * @param string $scope
      * @param string $id_token
+     * @param string $code_challenge
+     * @param string $code_challenge_method
      * @return bool|mixed
      */
     public function setAuthorizationCode(
@@ -539,7 +545,7 @@ class storage_moodle implements
      * Getter for public privit keys used by client
      *
      * @param mixed $client_id
-     * @param $subject
+     * @param string $subject
      * @return string
      */
     public function getClientKey($client_id, $subject) {
@@ -569,10 +575,10 @@ class storage_moodle implements
      * Not implemented.
      *
      * @param mixed $client_id
-     * @param $subject
-     * @param $audience
-     * @param $expires
-     * @param $jti
+     * @param string $subject
+     * @param sting $audience
+     * @param int $expiration
+     * @param string $jti
      * @return array|null
      */
     public function getJti($client_id, $subject, $audience, $expiration, $jti) {
@@ -581,12 +587,15 @@ class storage_moodle implements
     }
 
     /**
+     * set JTI in moodle database
+     *
      * (@inheritdoc)
-     * @param mixed $client_id
-     * @param $subject
-     * @param $audience
-     * @param $expires
-     * @param $jti
+     *
+     * @param int $client_id
+     * @param string $subject
+     * @param string $audience
+     * @param int $expiration
+     * @param string $jti json
      * @return bool
      */
     public function setJti($client_id, $subject, $audience, $expiration, $jti) {
@@ -649,13 +658,6 @@ class storage_moodle implements
     // phpcs:disable moodle.Commenting.InlineComment.SpacingBefore
     // phpcs:disable moodle.Commenting.InlineComment.NotCapital
     //
-    // /**
-    //  * @param string $username
-    //  * @param string $password
-    //  * @param string $firstName
-    //  * @param string $lastName
-    //  * @return bool
-    //  */
     // public function setUser($username, $password, $firstName = null, $lastName = null) {
     //     global $DB;
     //     $user = $DB->get_record('user', ['username' => $username]);
@@ -681,14 +683,6 @@ class storage_moodle implements
     //     return true;
     // }
     //
-    // /**
-    //  * DDL to create OAuth2 database and tables for PDO storage
-    //  *
-    //  * @see https://github.com/dsquier/oauth2-server-php-mysql
-    //  *
-    //  * @param string $dbName
-    //  * @return string
-    //  */
     // public function getBuildSql($notused = false) {
     //     $sql = "
     //     CREATE TABLE mdl_oauth_clients (
@@ -762,5 +756,5 @@ class storage_moodle implements
     // ";
     //
     //     return $sql;
-    // }
+    // }.
 }

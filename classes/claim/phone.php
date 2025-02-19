@@ -31,7 +31,7 @@ class phone implements claim {
 
     /**
      * Get phone claim.
-     * @param array of core_user user user want the address claim from
+     * @param array $user core_user want the address claim from
      * @return array() Returns phone_number information of user
      */
     public function claim($user) {
