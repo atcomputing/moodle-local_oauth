@@ -22,7 +22,6 @@ default:
   cache:
     paths:
       - .cache
-      - vendor/
 
   image: moodlehq/moodle-php-apache:8.3
   before_script:
@@ -34,15 +33,13 @@ default:
     - nvm install --default --latest-npm lts/gallium
     - composer create-project -n --no-dev --no-progress --no-ansi  --prefer-dist moodlehq/moodle-plugin-ci /opt/moodle-plugin-ci ^4
     - export PATH="/opt/moodle-plugin-ci/bin:/opt/moodle-plugin-ci/vendor/bin:$PATH"
-    # TODO not always needed
-    # install moodle
-    # - moodle-plugin-ci install --db-host db
-    # - '{ php -S 0.0.0.0:8000 -t "$CI_PROJECT_DIR/moodle" >/dev/null 2>&1 & }'
 
-# install dependencies:
-#   stage: prepare
-#   script:
-#     composer install
+check dependencies:
+  stage: test
+  script:
+    - composer validate --strict
+    # NOTE: run composer update if you get errors here
+    - composer outdated --strict
 
 test:
   stage: test
@@ -60,13 +57,16 @@ test:
       variables:
         MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'
   script:
-    - composer install
     - apt update
     - apt -yqq install --no-install-suggests default-jre-headless mariadb-client
     - moodle-plugin-ci install --moodle=/opt/moodle  --db-name moodle --db-host db
     - moodle-plugin-ci phplint $CI_PROJECT_DIR
     - moodle-plugin-ci phpunit $CI_PROJECT_DIR
     - moodle-plugin-ci validate $CI_PROJECT_DIR
+    - moodle-plugin-ci phpmd
+    - moodle-plugin-ci mustache
+    - moodle-plugin-ci grunt
+    - moodle-plugin-ci phpdoc
     - moodle-plugin-ci behat --auto-rerun 0 --profile chrome $CI_PROJECT_DIR
 
 
@@ -75,15 +75,9 @@ validate:
   # image: moodlehq/moodle-php-apache:7
   image: moodlehq/moodle-php-apache:8.1
   script:
-    - composer install
     # - validate-version # TODO complains about CHANGELOG.md, even if it exist double check
     - moodle-plugin-ci savepoints $CI_PROJECT_DIR
 
-    # TODO
-    # - moodle-plugin-ci phpmd
-    # - moodle-plugin-ci mustache
-    # - moodle-plugin-ci grunt
-    # - moodle-plugin-ci phpdoc
 
 moodle-lint:
   stage: test
@@ -100,9 +94,6 @@ package plugin:
     - apt update
     - apt install zip -y
   script:
-    - rm -rf vendor/ .cache
-    - 'curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer'
-    - composer install --no-dev
     - 'version=$(sed -n ''s/\s*$plugin->version\s*=\s\([0-9]*\);.*/\1/p'' version.php)'
     - 'echo "version: ${version}"'
     - 'folder="$(basename $CI_PROJECT_DIR)"'

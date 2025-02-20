@@ -96,10 +96,9 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci mustache ./plugin
 
-      # no javascript used in  this pluing
-      # - name: Grunt
-      #   if: ${{ !cancelled() }}
-      #   run: moodle-plugin-ci grunt --max-lint-warnings 0 ./plugin
+      - name: Grunt
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci grunt --max-lint-warnings 0 ./plugin
 
       - name: PHPUnit tests
         if: ${{ !cancelled() }}
