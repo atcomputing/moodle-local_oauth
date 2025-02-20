@@ -258,6 +258,8 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
 
         $client = "dummy_client";
         $scope = "dummy_scopes";
+
+        // Test will fail if not all refreshtoken are unique.
         $refreshtoken = bin2hex(openssl_random_pseudo_bytes(10));
 
         // Fill local_oauth_access_tokens table.
