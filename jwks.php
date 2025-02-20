@@ -18,7 +18,8 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright   2024 Rens Sikma <r.sikam@atcomputing.nl>
+ * @copyright   2024 AT Computing
+ * @author      Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

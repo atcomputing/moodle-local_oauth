@@ -18,7 +18,8 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
+ * @copyright   2024 AT Computing
+ * @author      Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_oauth\claim;
@@ -31,7 +32,7 @@ class email implements claim {
 
     /**
      * Get email claim.
-     * @param array of core_user user user want the email claim from
+     * @param array $user core_user user user want the email claim from
      * @return array() Returns email information of user
      */
     public function claim($user) {

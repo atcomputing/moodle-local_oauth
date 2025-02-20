@@ -36,7 +36,7 @@ default:
     - export PATH="/opt/moodle-plugin-ci/bin:/opt/moodle-plugin-ci/vendor/bin:$PATH"
     # TODO not always needed
     # install moodle
-    # - moodle-plugin-ci install --db-host db 
+    # - moodle-plugin-ci install --db-host db
     # - '{ php -S 0.0.0.0:8000 -t "$CI_PROJECT_DIR/moodle" >/dev/null 2>&1 & }'
 
 # install dependencies:
@@ -74,8 +74,6 @@ validate:
   stage: test
   # image: moodlehq/moodle-php-apache:7
   image: moodlehq/moodle-php-apache:8.1
-  # variables:
-  #   MOODLE_BRANCH: 'MOODLE_310_STABLE'
   script:
     - composer install
     # - validate-version # TODO complains about CHANGELOG.md, even if it exist double check

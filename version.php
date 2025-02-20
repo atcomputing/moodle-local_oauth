@@ -15,14 +15,15 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin index file
+ * Plugin version file
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   https://github.com/examus/moodle-local_oauth
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2022031102;   // The (date) version of this plugin.
-$plugin->requires = 2011021900;   // Requires this Moodle version.
+$plugin->version  = 2025022000;   // The (date) version of this plugin.
+$plugin->requires = 2022112800;   // Requires this Moodle version.
 $plugin->component = 'local_oauth';
+$plugin->maturity = MATURITY_ALPHA;

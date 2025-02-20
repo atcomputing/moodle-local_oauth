@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin index file
+ * Plugin lib file
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   https://github.com/examus/moodle-local_oauth
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,7 +26,11 @@
 // TODO can we decouple confirmation page/form from logic.
 /**
  * If user is authorized with request scopes.
- * If request for first time, and confirmation is required. render confirmation pagekkk
+ * If request for first time, and confirmation is required. render confirmation page.
+ *
+ * @param string $url The url of the called authorization endpoint
+ * @param int $clientid id of the client called
+ * @param bool|string $scope unexpaned scope string
  * @return Boolean if user is autrhoized by with these scopes
  */
 function get_authorization_from_form($url, $clientid, $scope = false) {
@@ -59,6 +63,11 @@ function get_authorization_from_form($url, $clientid, $scope = false) {
 }
 /**
  * Test if user_id is already authorized for this scope.
+ *
+ * @param int $userid
+ * @param int $clientid
+ * @param bool|string $scope unexpaned scope string
+ * @return bool
  **/
 function is_scope_authorized_by_user($userid, $clientid, $scope = false) {
     global $DB;
@@ -70,6 +79,10 @@ function is_scope_authorized_by_user($userid, $clientid, $scope = false) {
 
 /**
  * Store used has/is authorize with these scopes.
+ *
+ * @param int $userid
+ * @param int $clientid
+ * @param bool|string $scope unexpaned scope string
  **/
 function authorize_user_scope($userid, $clientid, $scope = false) {
     global $DB;

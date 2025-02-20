@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin index file
+ * Plugin form for edit_client
  *
  * @package     local_oauth
- * @copyright
+ * @copyright   https://github.com/examus/moodle-local_oauth
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -103,6 +103,8 @@ class edit_client extends moodleform {
 
     /**
      * Validate form data.
+     * @param array $data parameter passed by the form
+     * @param array $files files passed by the form
      */
     public function validation($data, $files) {
         global $DB;

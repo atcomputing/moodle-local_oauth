@@ -18,7 +18,8 @@
  * Plugin index file
  *
  * @package     local_oauth
- * @copyright   2024 Rens Sikma <r.sikma@atcomping.nl>
+ * @copyright   2024 AT Computing
+ * @author      Rens Sikma <r.sikma@atcomping.nl>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_oauth\claim;
@@ -29,10 +30,9 @@ namespace local_oauth\claim;
  */
 class address implements claim {
 
-
     /**
      * Get addres claim.
-     * @param array of core_user user user want the address claim from
+     * @param array $user core_user user user want the address claim from
      * @return array() Returns address information of user
      */
     public function claim($user): array {
@@ -40,7 +40,7 @@ class address implements claim {
             'address' => [
                 // Not inplemented 'formatted', 'region' 'postal_code'.
                 'street_address' => $user->address,
-                'locality' => $user->address,
+                'locality' => $user->city,
                 'country' => $user->country,
             ],
         ];
