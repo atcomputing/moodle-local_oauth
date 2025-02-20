@@ -53,6 +53,7 @@ jobs:
 
       - name: Initialise moodle-plugin-ci
         run: |
+          chmod u+rw ./plugin -R
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
           echo $(cd ci/bin; pwd) >> $GITHUB_PATH
           echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
