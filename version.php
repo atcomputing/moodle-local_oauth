@@ -18,7 +18,7 @@
  * Plugin version file
  *
  * @package     local_oauth
- * @copyright   https://github.com/examus/moodle-local_oauth
+ * @copyright   https://github.com/projectestac/moodle-local_oauth
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;

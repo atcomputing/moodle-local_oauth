@@ -18,7 +18,7 @@
  * local_oauth user granted event.
  *
  * @package    local_oauth
- * @copyright   https://github.com/examus/moodle-local_oauth
+ * @copyright   https://github.com/projectestac/moodle-local_oauth
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_oauth\form;
