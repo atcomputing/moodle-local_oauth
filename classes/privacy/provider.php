@@ -37,10 +37,9 @@ use core_privacy\local\request\writer;
  *
  */
 class provider implements
+    \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\core_userlist_provider {
-
+    \core_privacy\local\request\plugin\provider {
     /**
      * Return the fields which contain personal data.
      *
@@ -71,7 +70,8 @@ class provider implements
                 'expires' => 'privacy:metadata:local_oauth:refresh_tokens:expires',
                 'scope' => 'privacy:metadata:local_oauth:refresh_tokens:scope',
             ],
-            'privacy:metadata:local_oauth:refresh_tokens:tableexplanation');
+            'privacy:metadata:local_oauth:refresh_tokens:tableexplanation'
+        );
 
         $collection->add_database_table(
             'local_oauth_auth_codes',
@@ -85,9 +85,11 @@ class provider implements
                 'scope' => 'privacy:metadata:local_oauth:auth_codes:scope',
                 'id_token' => 'privacy:metadata:local_oauth:auth_codes:id_token',
             ],
-            'privacy:metadata:local_oauth:auth_codes:tableexplanation');
+            'privacy:metadata:local_oauth:auth_codes:tableexplanation'
+        );
 
-        $collection->add_database_table('local_oauth_access_tokens',
+        $collection->add_database_table(
+            'local_oauth_access_tokens',
             [
                 'id' => 'privacy:metadata:local_oauth:access_tokens:id',
                 'access_token' => 'privacy:metadata:local_oauth:access_tokens:access_token',
@@ -96,7 +98,8 @@ class provider implements
                 'expires' => 'privacy:metadata:local_oauth:access_tokens:expires',
                 'scope' => 'privacy:metadata:local_oauth:access_tokens:scope',
             ],
-            'privacy:metadata:local_oauth:access_tokens:tableexplanation');
+            'privacy:metadata:local_oauth:access_tokens:tableexplanation'
+        );
 
         $collection->add_external_location_link(
             'oauth_client',
@@ -116,7 +119,9 @@ class provider implements
                 'locality ' => 'privacy:metadata:oauth_client:locality',
                 'country' => 'privacy:metadata:oauth_client:country',
                 'enrolments' => 'privacy:metadata:oauth_client:enrolments',
-            ], 'privacy:metadata:oauth_client');
+            ],
+            'privacy:metadata:oauth_client'
+        );
 
         // Plugin also access user and enrolment data but does not store or modify it.
         // So we dont have to specify that.
@@ -134,7 +139,6 @@ class provider implements
 
         $contextlist = new \core_privacy\local\request\contextlist();
         return $contextlist->add_user_context($userid);
-
     }
 
     /**
@@ -181,7 +185,7 @@ class provider implements
         $userauthscopes = $DB->get_records('local_oauth_user_auth_scopes', ['user_id' => $user->id]);
         foreach ($userauthscopes as $scope) {
             $scope->user_id = transform::user($scope->user_id);
-            writer::with_context($context)->export_data( array_merge($subcontext, [
+            writer::with_context($context)->export_data(array_merge($subcontext, [
                 $scope->client_id,
                 $scope->scope,
                 get_string('privacy:metadata:local_oauth:auth_scopes', 'local_oauth'),
@@ -217,7 +221,7 @@ class provider implements
             $token->user_id = transform::user($token->user_id);
             $token->expires = transform::datetime($token->expires);
             $token->access_token = $notexportedstr;
-            writer::with_context($context)->export_data( array_merge($subcontext, [
+            writer::with_context($context)->export_data(array_merge($subcontext, [
                 $token->client_id,
                 $token->scope,
                 get_string('privacy:metadata:local_oauth:access_tokens', 'local_oauth'),
@@ -283,8 +287,5 @@ class provider implements
         $DB->delete_records('local_oauth_refresh_tokens', ['user_id' => $userid]);
         $DB->delete_records('local_oauth_auth_codes', ['user_id' => $userid]);
         $DB->delete_records('local_oauth_access_tokens', ['user_id' => $userid]);
-
     }
-
 }
-

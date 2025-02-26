@@ -24,7 +24,7 @@
 
 require_once('../../config.php');
 require_once('vendor/autoload.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 require_login();
 
@@ -40,7 +40,7 @@ if (isset($id)) {
         echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
     }
 } else {
-    $client = new local_oauth\client( "", "", ["authorization_code"], ["openid", "profile"], "0", 0);
+    $client = new local_oauth\client("", "", ["authorization_code"], ["openid", "profile"], "0", 0);
 }
 $form = new \local_oauth\form\edit_client();
 

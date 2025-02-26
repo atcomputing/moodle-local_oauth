@@ -27,13 +27,12 @@ namespace local_oauth;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
+require_once($CFG->dirroot . '/local/oauth/vendor/autoload.php');
 
 /**
  * test user infor response
  */
 final class user_info_test extends \advanced_testcase {
-
     /**
      * test userinfor response after authentication with all scopes
      * @covers \local\oauth::
@@ -42,12 +41,14 @@ final class user_info_test extends \advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        $client = new client('client',
+        $client = new client(
+            'client',
             'http://localhost',
             ['authorization_code'],
             ['openid', 'profile', 'email', 'address', 'phone', 'enrolments'],
             "0",
-            0);
+            0
+        );
         $client->store();
 
         $course = $this->getDataGenerator()->create_course();

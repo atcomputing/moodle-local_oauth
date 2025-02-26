@@ -30,7 +30,6 @@ namespace local_oauth\claim;
  * @link https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
  */
 class profile implements claim {
-
     /**
      * Get addres claim.
      * @param array $user core_user want the address claim from
@@ -46,7 +45,7 @@ class profile implements claim {
             'middle_name' => $user->middlename,
             'nickname' => $user->alternatename,
             'preferred_username' => $user->username,
-            'profile' => $CFG->wwwroot."/user/profile.php?id=".$user->id,
+            'profile' => $CFG->wwwroot . "/user/profile.php?id=" . $user->id,
             'picture' => $user->picture ? $userpicture->get_url($PAGE)->raw_out() : null,
             // NOTE moodle timezone is 99 if you set timezone is same as server.
             'zoneinfo' => $user->timezone == '99' ? date_default_timezone_get() : $user->timezone,

@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
+require_once($CFG->dirroot . '/local/oauth/vendor/autoload.php');
 
 
 // TODO include test from vendor/bshaffer/oauth2-server-php/test for storage.
@@ -38,7 +38,6 @@ require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
  * Test storage class for moodle oauth
  */
 final class storage_moodle_test extends \advanced_testcase {
-
     /**
      * Test getUserDetails with aribtray generated user.
      * @covers \local\oauth\storage_moodle::get_userDetails

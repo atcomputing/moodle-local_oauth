@@ -34,19 +34,17 @@ use OAuth2\OpenID\Storage\AuthorizationCodeInterface as OpenIDAuthorizationCodeI
  * This is done be implementing the interfaced from OAuth2
  */
 class storage_moodle implements
-    \OAuth2\Storage\AuthorizationCodeInterface,
     \OAuth2\Storage\AccessTokenInterface,
+    \OAuth2\Storage\AuthorizationCodeInterface,
     \OAuth2\Storage\ClientCredentialsInterface,
-    \OAuth2\Storage\UserCredentialsInterface,
-    \OAuth2\Storage\RefreshTokenInterface,
     \OAuth2\Storage\JwtBearerInterface,
-    \OAuth2\Storage\ScopeInterface,
+    OpenIDAuthorizationCodeInterface,
     \OAuth2\Storage\PublicKeyInterface,
+    \OAuth2\Storage\RefreshTokenInterface,
+    \OAuth2\Storage\ScopeInterface,
     \OAuth2\OpenID\Storage\UserClaimsInterface,
-    OpenIDAuthorizationCodeInterface {
-
+    \OAuth2\Storage\UserCredentialsInterface {
     // TODO have only 1 public private key pair for all clients?
-
     /** @var config null, represent config. Not used now*/
     protected $config;
 
@@ -62,11 +60,11 @@ class storage_moodle implements
     public function __construct($connection, $config = []) {
         $this->config = $config;
         $this->claimfunctions = [
-            'profile' => new \local_oauth\claim\profile,
-            'email' => new \local_oauth\claim\email,
-            'address' => new \local_oauth\claim\address,
-            'phone' => new \local_oauth\claim\phone,
-            'enrolments' => new \local_oauth\claim\enrolments,
+            'profile' => new \local_oauth\claim\profile(),
+            'email' => new \local_oauth\claim\email(),
+            'address' => new \local_oauth\claim\address(),
+            'phone' => new \local_oauth\claim\phone(),
+            'enrolments' => new \local_oauth\claim\enrolments(),
         ];
     }
 
@@ -134,7 +132,8 @@ class storage_moodle implements
         $redirect_uri = null,
         $grant_types = null,
         $scope = null,
-        $user_id = null) {
+        $user_id = null
+    ) {
         global $DB;
         if ($client = $DB->get_record('local_oauth_clients', ['client_id' => $client_id])) {
             $client->client_secret = $client_secret;
@@ -276,7 +275,8 @@ class storage_moodle implements
         $scope = null,
         $id_token = null,
         $code_challenge = null,
-        $code_challenge_method = null) {
+        $code_challenge_method = null
+    ) {
 
         // TODO Implement Proof Key for Code Exchange (code_challenge), by storing in in db?
         global $DB;
@@ -325,7 +325,8 @@ class storage_moodle implements
         $redirect_uri,
         $expires,
         $scope = null,
-        $id_token = null) {
+        $id_token = null
+    ) {
         global $DB;
 
         // If it exists, update it.
@@ -550,7 +551,7 @@ class storage_moodle implements
      */
     public function getClientKey($client_id, $subject) {
         global $DB;
-        return $DB->get_field('local_oauth_jwt', 'public_key' , ['client_id' => $client_id, 'subject' => $subject]);
+        return $DB->get_field('local_oauth_jwt', 'public_key', ['client_id' => $client_id, 'subject' => $subject]);
     }
 
     /**
@@ -612,10 +613,11 @@ class storage_moodle implements
         global $DB;
         return $DB->get_field_select(
             'local_oauth_public_keys',
-            'public_key' ,
+            'public_key',
             'client_id=:client_id OR client_id IS NULL',
             ['client_id' => $client_id],
-            'client_id IS NOT NULL DESC');
+            'client_id IS NOT NULL DESC'
+        );
     }
 
     /**
@@ -643,10 +645,11 @@ class storage_moodle implements
         global $DB;
         $alg = $DB->get_field_select(
             'local_oauth_public_keys',
-            'encryption_algorithm' ,
+            'encryption_algorithm',
             'client_id=:client_id OR client_id IS NULL',
             ['client_id' => $client_id],
-            'client_id IS NOT NULL DESC');
+            'client_id IS NOT NULL DESC'
+        );
         if ($alg) {
             return $alg;
         }

@@ -29,7 +29,6 @@ namespace local_oauth\claim;
  * @link https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim
  */
 class address implements claim {
-
     /**
      * Get addres claim.
      * @param array $user core_user user user want the address claim from

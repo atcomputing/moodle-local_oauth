@@ -28,12 +28,11 @@ namespace local_oauth;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
+require_once($CFG->dirroot . '/local/oauth/vendor/autoload.php');
 /**
  * test server class
  */
 final class server_test extends \advanced_testcase {
-
     /**
      * Test full authorization_code grant_type flow
      * @covers \local\oauth\server::
@@ -76,7 +75,7 @@ final class server_test extends \advanced_testcase {
             ->getAuthorizationCode($query['code']);
         $this->assertNotNull($code);
         $this->assertNotNull($code['authorization_code']);
-        $this->assertEquals( $user->id, $code['user_id']);
+        $this->assertEquals($user->id, $code['user_id']);
         $this->assertEquals('http://localhost', $code['redirect_uri']);
         $this->assertNotNull($code['expires']);
         $this->assertEquals('openid email address', $code['scope']);

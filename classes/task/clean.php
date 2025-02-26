@@ -28,7 +28,6 @@ namespace local_oauth\task;
  * Deletes expired Oauth tokens
  */
 class clean extends \core\task\scheduled_task {
-
     /**
      * Get a descriptive name for this task.
      *

@@ -28,7 +28,6 @@ namespace local_oauth\event;
  * Event that is triggered when user is NOT succesfull authenticated succesfull with this oauth plugin
  */
 class user_not_granted extends user_granted {
-
     /**
      * Returns description of what happened.
      *

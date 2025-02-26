@@ -29,13 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-require_once($CFG->dirroot.'/local/oauth/vendor/autoload.php');
+require_once($CFG->dirroot . '/local/oauth/vendor/autoload.php');
 
 /**
  * test client class
  */
 final class client_test extends \advanced_testcase {
-
     /**
      * test creating 2 clients
      * @covers \local\oauth\client::__construct

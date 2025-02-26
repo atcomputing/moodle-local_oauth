@@ -26,7 +26,7 @@
 // phpcs:disable moodle.Files.RequireLogin.Missing
 
 require('../../config.php');
-require_once(__DIR__.'/lib.php');
+require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
 $clientid = required_param('client_id', PARAM_RAW);
@@ -34,26 +34,25 @@ $responsetype = required_param('response_type', PARAM_RAW);
 $scope = optional_param('scope', false, PARAM_TEXT);
 $state = optional_param('state', false, PARAM_TEXT);
 $nonce = optional_param('nonce', false, PARAM_TEXT);
-$url = $CFG->wwwroot.'/local/oauth/login.php?client_id='.$clientid.'&response_type='.$responsetype;
+$url = $CFG->wwwroot . '/local/oauth/login.php?client_id=' . $clientidi . '&response_type=' . $responsetype;
 
 if ($scope) {
-    $url .= '&scope='.$scope;
+    $url .= '&scope=' . $scope;
 }
 
 if ($state) {
-    $url .= '&state='.$state;
+    $url .= '&state=' . $state;
 }
 
 if ($nonce) {
-    $url .= '&nonce='.$nonce;
+    $url .= '&nonce=' . $nonce;
 }
 
-$PAGE->set_url($CFG->wwwroot.'/local/oauth/login.php');
+$PAGE->set_url($CFG->wwwroot . '/local/oauth/login.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_pagelayout('login');
 
 if (isloggedin() && !isguestuser()) {
-
     // Include our OAuth2 Server object.
     $server = new \local_oauth\server();
 

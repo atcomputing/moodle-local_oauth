@@ -34,7 +34,6 @@ require_once("$CFG->libdir/formslib.php");
  * Form for client options
  */
 class edit_client extends moodleform {
-
     /**
      * Define the fields of the form
      */
@@ -68,7 +67,7 @@ class edit_client extends moodleform {
         $bform->setExpanded('othersettings', false);
         $grantoptions = $server->getGrantTypes();
         foreach ($grantoptions as $key => $value) {
-            $grantoptions[$key] = $key . ": " . get_string($key."_explanation", "local_oauth");
+            $grantoptions[$key] = $key . ": " . get_string($key . "_explanation", "local_oauth");
         }
         // TODO Consider replacing this with checkbox for granttypes.
         $select = $bform->addElement('select', 'granttypes', get_string('grant_types', 'local_oauth'), $grantoptions);
@@ -98,7 +97,6 @@ class edit_client extends moodleform {
         $bform->setType('noconfirmation', PARAM_BOOL);
 
         $this->add_action_buttons();
-
     }
 
     /**

@@ -46,8 +46,3 @@ $string['scope'] = 'Ámbito';
 $string['settings'] = 'Configuración del proveedor de OAuth';
 
 $string['user_id'] = 'ID de usuario';
-
-
-
-
-

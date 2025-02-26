@@ -47,8 +47,3 @@ $string['scope'] = 'Abast';
 $string['settings'] = 'Configuració del proveïdor OAuth';
 
 $string['user_id'] = 'ID d\'usuari';
-
-
-
-
-

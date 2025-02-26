@@ -29,7 +29,6 @@ use moodleform;
  * Form that request the use if he the client should be authorize, to get information specified by the requested scope.
  */
 class authorize extends moodleform {
-
     /**
      * Defined fields for the authorize form.
      */
@@ -38,14 +37,14 @@ class authorize extends moodleform {
 
         $clientid = required_param('client_id', PARAM_RAW);
 
-        $text = get_string('auth_question', 'local_oauth', $clientid).'<br />';
+        $text = get_string('auth_question', 'local_oauth', $clientid) . '<br />';
         $mform->addElement('html', $text);
         $scope = optional_param('scope', false, PARAM_TEXT);
         if (!empty($scope)) {
             $scopes = explode(' ', $scope);
-            $text = get_string('auth_question_desc', 'local_oauth').'<ul>';
+            $text = get_string('auth_question_desc', 'local_oauth') . '<ul>';
             foreach ($scopes as $scope) {
-                $text .= '<li>'.get_string('scope_'.$scope, 'local_oauth').'</li>';
+                $text .= '<li>' . get_string('scope_' . $scope, 'local_oauth') . '</li>';
             }
             $text .= '</ul>';
         } else {

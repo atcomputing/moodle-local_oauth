@@ -41,5 +41,5 @@ function xmldb_local_oauth_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2022031102, 'local', 'oauth');
     }
-
+    return true;
 }

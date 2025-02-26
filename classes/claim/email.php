@@ -29,7 +29,6 @@ namespace local_oauth\claim;
  * @link https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
  */
 class email implements claim {
-
     /**
      * Get email claim.
      * @param array $user core_user user user want the email claim from

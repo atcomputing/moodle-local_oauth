@@ -29,7 +29,6 @@ namespace local_oauth\claim;
  * @link https://openid.net/specs/openid-connect-core-1_0.html#Claims
  */
 interface claim {
-
     // TODO why array not the object.
 
     /**

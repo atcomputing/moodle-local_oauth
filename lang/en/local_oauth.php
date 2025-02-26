@@ -48,7 +48,6 @@ $string['oauth:manageclients'] = 'Manage OAuth provider Clients';
 $string['plugin'] = 'Local Plugin';
 $string['pluginname'] = 'OAuth provider';
 
-$string['privacy:request:notexportedsecurity'] = 'Not exported for security reasons'; // Picked from lang/en/external.php.
 $string['privacy:metadata:local_oauth:access_tokens'] = 'Oauth access_tokens';
 $string['privacy:metadata:local_oauth:access_tokens:access_token'] = 'access token itself';
 $string['privacy:metadata:local_oauth:access_tokens:client_id'] = 'Id of client for which access token was generated';
@@ -58,7 +57,7 @@ $string['privacy:metadata:local_oauth:access_tokens:scope'] = 'Scopes in which t
 $string['privacy:metadata:local_oauth:access_tokens:tableexplanation'] = 'Stores valid access tokens.';
 $string['privacy:metadata:local_oauth:access_tokens:user_id'] = 'Id of user attached to this access token';
 $string['privacy:metadata:local_oauth:auth_codes'] = 'authroization codes';
-$string['privacy:metadata:local_oauth:auth_codes:authorization_code'] = 'the authorization code itself'.
+$string['privacy:metadata:local_oauth:auth_codes:authorization_code'] = 'the authorization code itself';
 $string['privacy:metadata:local_oauth:auth_codes:client_id'] = 'Id of client that is allowed to use authorization code';
 $string['privacy:metadata:local_oauth:auth_codes:expires'] = 'How long authorization code is valid.';
 $string['privacy:metadata:local_oauth:auth_codes:id'] = 'Id of authorization code.';
@@ -83,8 +82,6 @@ $string['privacy:metadata:local_oauth:refresh_tokens:scope'] = 'scopes of access
 $string['privacy:metadata:local_oauth:refresh_tokens:tableexplanation'] = 'Stores which refresh tokens can be used to refresh a access token.';
 $string['privacy:metadata:local_oauth:refresh_tokens:user_id'] = 'Id of User that can use the refresh_token.';
 
-
-
 $string['privacy:metadata:oauth_client'] = 'OAuth2/Openid-Connect Client.';
 $string['privacy:metadata:oauth_client:country'] = 'If scope contains address, users country is send to oauth_client';
 $string['privacy:metadata:oauth_client:email'] = 'If scope contains email, users email is send to oauth_client';
@@ -102,6 +99,8 @@ $string['privacy:metadata:oauth_client:street_address'] = 'If scope contains add
 $string['privacy:metadata:oauth_client:updated_at'] = 'If scope contains profile, when profile was last update is send to oauth_client';
 $string['privacy:metadata:oauth_client:zoneinfo'] = 'If scope contains profile, timezone of the user is send to oauth_client';
 
+$string['privacy:request:notexportedsecurity'] = 'Not exported for security reasons';
+
 $string['redirect_uri'] = 'Redirect URL';
 $string['redirect_uri_help'] = 'URI where to redirect after login.';
 $string['refresh_token_explanation'] = 'let you refresh access token';
@@ -118,10 +117,3 @@ $string['settings'] = 'OAuth provider settings';
 
 $string['user_credentials_explanation'] = 'Lets application login via sending Users password ';
 $string['user_id'] = 'User ID';
-
-
-
-
-
-
-

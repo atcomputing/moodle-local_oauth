@@ -24,7 +24,7 @@
  **/
 
 require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 require_login();
 
@@ -46,8 +46,10 @@ if ($action == 'del') {
         echo $OUTPUT->notification(get_string('client_not_exists', 'local_oauth'));
     }
 
-    $confirm  = new moodle_url($PAGE->url,
-        ['action' => "delconfirmed", 'id' => $id, 'sesskey' => sesskey()]);
+    $confirm = new moodle_url(
+        $PAGE->url,
+        ['action' => "delconfirmed", 'id' => $id, 'sesskey' => sesskey()]
+    );
     echo $OUTPUT->confirm(
         get_string('confirmdeletestr', 'local_oauth', $client->clientid),
         $confirm,
@@ -83,10 +85,12 @@ if (!empty($clients)) {
 
         $editlink = $OUTPUT->action_icon(
             new \moodle_url('edit.php', ['id' => $client->id]),
-            new \pix_icon('t/edit', get_string('edit')));
+            new \pix_icon('t/edit', get_string('edit'))
+        );
         $deletelink = $OUTPUT->action_icon(
             new \moodle_url('view.php', ['id' => $client->id, 'action' => 'del']),
-            new \pix_icon('i/trash', get_string('delete')));
+            new \pix_icon('i/trash', get_string('delete'))
+        );
         $row[] = $editlink . $deletelink;
 
         $table->data[] = $row;
@@ -95,7 +99,7 @@ if (!empty($clients)) {
 }
 
 echo '<div>';
-echo '<a href="edit.php" class="btn btn-primary">'.get_string('addclient', 'local_oauth').'</a>';
+echo '<a href="edit.php" class="btn btn-primary">' . get_string('addclient', 'local_oauth') . '</a>';
 echo '</div>';
 
 echo $OUTPUT->footer();

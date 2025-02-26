@@ -39,7 +39,6 @@ require_once($CFG->dirroot . '/local/oauth/lib.php');
  * Privacy provider tests class.
  */
 final class provider_test extends \core_privacy\tests\provider_testcase {
-
     /**
      * Test for provider::get_metadata().
      *
@@ -144,16 +143,20 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
             $client,
             $scope,
         ];
-        $newsubcontext = array_merge( $subcontext,
-            [get_string('privacy:metadata:local_oauth:auth_scopes', 'local_oauth')]);
+        $newsubcontext = array_merge(
+            $subcontext,
+            [get_string('privacy:metadata:local_oauth:auth_scopes', 'local_oauth')]
+        );
         $data = $writer->get_data($newsubcontext);
         $this->assertObjectHasProperty('id', $data);
         $this->assertObjectHasProperty('client_id', $data);
         $this->assertEquals($data->user_id, $user->id);
         $this->assertObjectHasProperty('scope', $data);
 
-        $newsubcontext = array_merge( $subcontext,
-            [get_string('privacy:metadata:local_oauth:refresh_tokens', 'local_oauth', 'local_oauth')]);
+        $newsubcontext = array_merge(
+            $subcontext,
+            [get_string('privacy:metadata:local_oauth:refresh_tokens', 'local_oauth', 'local_oauth')]
+        );
         $data = $writer->get_data($newsubcontext);
 
         $this->assertObjectHasProperty('id', $data);
@@ -163,8 +166,10 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
         $this->assertObjectHasProperty('expires', $data);
         $this->assertObjectHasProperty('scope', $data);
 
-        $newsubcontext = array_merge( $subcontext,
-            [get_string('privacy:metadata:local_oauth:auth_codes', 'local_oauth', 'local_oauth')]);
+        $newsubcontext = array_merge(
+            $subcontext,
+            [get_string('privacy:metadata:local_oauth:auth_codes', 'local_oauth', 'local_oauth')]
+        );
         $data = $writer->get_data($newsubcontext);
         $this->assertObjectHasProperty('id', $data);
         $this->assertObjectHasProperty('authorization_code', $data);
@@ -175,8 +180,10 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
         $this->assertObjectHasProperty('scope', $data);
         $this->assertObjectHasProperty('id_token', $data);
 
-        $newsubcontext = array_merge( $subcontext,
-            [get_string('privacy:metadata:local_oauth:access_tokens', 'local_oauth', 'local_oauth')]);
+        $newsubcontext = array_merge(
+            $subcontext,
+            [get_string('privacy:metadata:local_oauth:access_tokens', 'local_oauth', 'local_oauth')]
+        );
         $data = $writer->get_data($newsubcontext);
         $this->assertObjectHasProperty('id', $data);
         $this->assertObjectHasProperty('access_token', $data);
@@ -184,7 +191,6 @@ final class provider_test extends \core_privacy\tests\provider_testcase {
         $this->assertEquals($data->user_id, $user->id);
         $this->assertObjectHasProperty('expires', $data);
         $this->assertObjectHasProperty('scope', $data);
-
     }
 
     /**

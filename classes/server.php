@@ -28,8 +28,7 @@ namespace local_oauth;
 /**
  * Server class reprenset the server settings used for this OIDC server
  */
-class server  extends \OAuth2\Server {
-
+class server extends \OAuth2\Server {
     // TODO Modify AuthorizeController so it add all claims in id_token.
     // TODO Make singelton.
     // TODO Do we want to support implicit flow.
@@ -69,7 +68,7 @@ class server  extends \OAuth2\Server {
             'authorization_code' => new \OAuth2\OpenID\GrantType\AuthorizationCode($storage),
             'client_credentials' => new \OAuth2\GrantType\ClientCredentials($storage),
             'user_credentials'   => new \OAuth2\GrantType\UserCredentials($storage),
-            'refresh_token'      => new \OAuth2\GrantType\RefreshToken($storage ),
+            'refresh_token'      => new \OAuth2\GrantType\RefreshToken($storage),
         ];
         parent::__construct($storage, $config, $granttypes);
     }
@@ -91,16 +90,16 @@ class server  extends \OAuth2\Server {
         global $CFG;
 
         $dir = "/local/oauth/.well-known/";
-        $path = $dir."openid-configuration";
+        $path = $dir . "openid-configuration";
 
         // TODO Does this work behind revers proxy.
         $base = $CFG->wwwroot . '/local_auth';
         $jsondata = [
             'issuer' => $CFG->wwwroot,
-            'authorization_endpoint' => $base.'/login.php',
-            'token_endpoint' => $base.'/token_endpoint.php',
-            'userinfo_endpoin' => $base.'/user_info.php',
-            'jwks_uri' => $base.'/jwks.php',
+            'authorization_endpoint' => $base . '/login.php',
+            'token_endpoint' => $base . '/token_endpoint.php',
+            'userinfo_endpoin' => $base . '/user_info.php',
+            'jwks_uri' => $base . '/jwks.php',
         ];
         $content = json_encode($jsondata, JSON_PRETTY_PRINT);
         echo $content;
