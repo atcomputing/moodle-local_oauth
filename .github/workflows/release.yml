@@ -1,0 +1,23 @@
+---
+name: Release Plugin
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    # TODO only when test successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Package
+        run: |
+          version=$(sed -n ''s/\s*$plugin->version\s*=\s\([0-9]*\);.*/\1/p'' version.php)
+          echo "version: ${version}"
+          ls -la
+          zip local_auth_${version}.zip . -r -x '*.git/*'
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: local_auth_${version}.zip
