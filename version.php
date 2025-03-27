@@ -23,7 +23,7 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2025022000;   // The (date) version of this plugin.
+$plugin->version  = 2025032700;   // The (date) version of this plugin.
 $plugin->requires = 2022112800;   // Requires this Moodle version.
 $plugin->component = 'local_oauth';
 $plugin->maturity = MATURITY_ALPHA;

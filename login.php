@@ -34,7 +34,7 @@ $responsetype = required_param('response_type', PARAM_RAW);
 $scope = optional_param('scope', false, PARAM_TEXT);
 $state = optional_param('state', false, PARAM_TEXT);
 $nonce = optional_param('nonce', false, PARAM_TEXT);
-$url = $CFG->wwwroot . '/local/oauth/login.php?client_id=' . $clientidi . '&response_type=' . $responsetype;
+$url = $CFG->wwwroot . '/local/oauth/login.php?client_id=' . $clientid . '&response_type=' . $responsetype;
 
 if ($scope) {
     $url .= '&scope=' . $scope;
